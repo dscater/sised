@@ -58,6 +58,18 @@ const columns = [
         data: "full_name",
     },
     {
+        title: "C.I.",
+        data: "full_ci",
+    },
+    {
+        title: "DIRECCIÓN",
+        data: "dir",
+    },
+    {
+        title: "TELÉFONO",
+        data: "fono",
+    },
+    {
         title: "TIPO",
         data: "tipo",
     },

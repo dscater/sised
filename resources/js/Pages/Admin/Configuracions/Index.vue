@@ -74,16 +74,16 @@ onMounted(() => {});
             <div class="col-12">
                 <div class="row">
                     <div class="col-md-4 form-group mb-3">
-                        <label for="">Razón Social</label>
+                        <label for="">Nombre del sistema</label>
                         <input
                             type="text"
                             class="form-control"
-                            v-model="form.razon_social"
+                            v-model="form.nombre_sistema"
                         />
                         <span
                             class="text-danger"
-                            v-if="form.errors?.razon_social"
-                            >{{ form.errors.razon_social }}</span
+                            v-if="form.errors?.nombre_sistema"
+                            >{{ form.errors.nombre_sistema }}</span
                         >
                     </div>
                     <div class="col-md-4 form-group mb-3">

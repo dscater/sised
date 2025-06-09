@@ -10,21 +10,15 @@ use Inertia\Inertia;
 class ConfiguracionController extends Controller
 {
     public $validacion = [
-        "razon_social" => "required|min:2",
+        "nombre_sistema" => "required|min:2",
         "alias" => "required",
     ];
 
     public $messages = [
-        "razon_social.required" => "Este campo es obligatorio",
-        "razon_social.min" => "Debes ingresar al menos :min caracteres",
         "nombre_sistema.required" => "Este campo es obligatorio",
         "nombre_sistema.min" => "Debes ingresar al menos :min caracteres",
-        "nit.required" => "Este campo es obligatorio",
-        "nit.min" => "Debes ingresar al menos :min caracteres",
-        "actividad.required" => "Este campo es obligatorio",
-        "actividad.min" => "Debes ingresar al menos :min caracteres",
-        "dir.required" => "Este campo es obligatorio",
-        "dir.min" => "Debes ingresar al menos :min caracteres",
+        "alias.required" => "Este campo es obligatorio",
+        "alias.min" => "Debes ingresar al menos :min caracteres",
     ];
 
     public function index(Request $request)
