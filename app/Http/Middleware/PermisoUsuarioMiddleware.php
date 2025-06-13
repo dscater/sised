@@ -31,6 +31,7 @@ class PermisoUsuarioMiddleware
 
                 "profile.edit",
                 "profile.update",
+                "profile.update_foto",
 
                 "users.getUser",
             ];

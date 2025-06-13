@@ -529,13 +529,22 @@ const logout = () => {
                 >
                     ADMINISTRACIÓN
                 </div>
-                <div class="menu-item">
-                    <a href="" class="menu-link">
+                <div
+                    v-if="
+                        user_logeado.permisos == '*' ||
+                        user_logeado.permisos.includes('evidencias.index')
+                    "
+                    class="menu-item"
+                    :class="[
+                        route_current == 'evidencias.index' ? 'active' : 'none',
+                    ]"
+                >
+                    <Link :href="route('evidencias.index')" class="menu-link">
                         <div class="menu-icon">
                             <i class="fa fa-list"></i>
                         </div>
                         <div class="menu-text">Evidencias</div>
-                    </a>
+                    </Link>
                 </div>
                 <div class="menu-item">
                     <a href="" class="menu-link">
@@ -568,25 +577,6 @@ const logout = () => {
                             <i class="fa fa-users"></i>
                         </div>
                         <div class="menu-text">Usuarios</div>
-                    </Link>
-                </div>
-                <div
-                    v-if="
-                        user_logeado.permisos == '*' ||
-                        user_logeado.permisos.includes('clientes.index')
-                    "
-                    class="menu-item"
-                    :class="[
-                        route_current == 'usuarios.clientes'
-                            ? 'active'
-                            : 'none',
-                    ]"
-                >
-                    <Link :href="route('usuarios.clientes')" class="menu-link">
-                        <div class="menu-icon">
-                            <i class="fa fa-user-friends"></i>
-                        </div>
-                        <div class="menu-text">Clientes</div>
                     </Link>
                 </div>
                 <div

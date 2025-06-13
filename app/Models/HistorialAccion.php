@@ -20,6 +20,8 @@ class HistorialAccion extends Model
         "modulo",
         "fecha",
         "hora",
+        "sistema",
+        "ip",
     ];
 
     /**

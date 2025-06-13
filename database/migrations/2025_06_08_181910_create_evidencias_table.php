@@ -22,9 +22,10 @@ return new class extends Migration
             $table->date("fecha_hallazgo");
             $table->time("hora_hallazgo");
             $table->string("lugar_recoleccion", 800);
-            $table->string("personar_recolector", 300);
+            $table->string("persona_recolector", 300);
             $table->string("herramienta_utilizada", 300);
             $table->date("fecha_registro")->nullable();
+            $table->integer("status")->default(1);
             $table->timestamps();
         });
     }

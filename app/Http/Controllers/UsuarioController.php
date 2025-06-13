@@ -2,46 +2,39 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UserPasswordRequest;
+use App\Http\Requests\UserStoreRequest;
+use App\Http\Requests\UserUpdateRequest;
 use App\Models\HistorialAccion;
 use App\Models\User;
-use App\Models\Venta;
-use App\Models\VentaLote;
+use App\Services\UserService;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
-use PgSql\Lob;
+use Inertia\Response as InertiaResponse;
 
 class UsuarioController extends Controller
 {
-    public $validacion = [
-        "nombres" => "required|min:1",
-        "apellidos" => "required|min:1",
-    ];
+    public function __construct(private UserService $userService) {}
 
-    public $mensajes = [
-        "nombres.required" => "Este campo es obligatorio",
-        "nombres.min" => "Debes ingresar al menos :min caracteres",
-        "apellidos.required" => "Este campo es obligatorio",
-        "apellidos.min" => "Debes ingresar al menos :min caracteres",
-        "usuario.required" => "Este campo es obligatorio",
-        "password.required" => "Este campo es obligatorio",
-    ];
-
-    public function index()
+    public function index(): InertiaResponse
     {
         return Inertia::render("Admin/Usuarios/Index");
     }
 
-    public function clientes()
+    public function clientes(): InertiaResponse
     {
         return Inertia::render("Admin/Usuarios/Clientes");
     }
 
-    public function listado()
+    public function listado(): JsonResponse
     {
         $usuarios = User::where("id", "!=", 1)->where("status", 1)->get();
         return response()->JSON([
@@ -74,13 +67,11 @@ class UsuarioController extends Controller
         $page = ($start / $length) + 1; // Cálculo de la página actual
         $search = $request->input('search');
 
-        $usuarios = User::selectRaw("users.*, CONCAT(users.nombre,' ',users.paterno,' ',users.materno) as full_name")
+        $usuarios = User::selectRaw("users.*, CONCAT(users.nombre,' ',users.paterno,' ',users.materno) as full_name, CONCAT(users.ci,' ',users.ci_exp) as full_ci")
             ->where("users.id", "!=", 1);
         if ($search && trim($search) != '') {
-            $usuarios->where(function ($q) use ($search) {
-                $q->where("users.usuario", "LIKE", "%$search%")
-                    ->orWhereRaw("CONCAT(users.nombre,' ',users.paterno,' ',users.materno) LIKE ?", ["%$search%"]);
-            });
+            $usuarios->orWhereRaw("users.usuario LIKE ?", ["%$search%"]);
+            $usuarios->orWhereRaw("CONCAT(users.nombres,' ',users.paterno,' ',users.materno) LIKE ?", ["%$search%"]);
         }
 
         // order
@@ -96,6 +87,12 @@ class UsuarioController extends Controller
         }
 
         $usuarios = $usuarios->where("status", 1)->paginate($length, ['*'], 'page', $page);
+
+        // Numeración
+        $usuarios->getCollection()->transform(function ($usuario, $index) use ($usuarios) {
+            $usuario->enumeracion = ($usuarios->currentPage() - 1) * $usuarios->perPage() + $index + 1;
+            return $usuario;
+        });
 
         return response()->JSON([
             'data' => $usuarios->items(),
@@ -126,38 +123,17 @@ class UsuarioController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    /**
+     * Store user
+     *
+     * @param UserStoreRequest $request
+     * @return RedirectResponse|Response
+     */
+    public function store(UserStoreRequest $request): RedirectResponse|Response
     {
-        $this->validacion['usuario'] = 'required|min:4|unique:users,usuario';
-        $this->validacion['password'] = 'required|min:4';
-        $request->validate($this->validacion, $this->mensajes);
         DB::beginTransaction();
         try {
-            $request['fecha_registro'] = date('Y-m-d');
-
-            // crear el Usuario
-            $nuevo_usuario = User::create([
-                "usuario" => mb_strtoupper($request->usuario),
-                "nombres" => mb_strtoupper($request->nombres),
-                "apellidos" => mb_strtoupper($request->apellidos),
-                "password" => "123456",
-                "acceso" => $request->acceso,
-                "fecha_registro" => $request->fecha_registro,
-            ]);
-            $nuevo_usuario->password = Hash::make($request->password);
-            $nuevo_usuario->save();
-
-            $datos_original = HistorialAccion::getDetalleRegistro($nuevo_usuario, "users");
-            HistorialAccion::create([
-                'user_id' => Auth::user()->id,
-                'accion' => 'CREACIÓN',
-                'descripcion' => 'EL USUARIO ' . Auth::user()->usuario . ' REGISTRO UN USUARIO',
-                'datos_original' => $datos_original,
-                'modulo' => 'USUARIOS',
-                'fecha' => date('Y-m-d'),
-                'hora' => date('H:i:s')
-            ]);
-
+            $this->userService->crear($request->validated());
             DB::commit();
             return redirect()->route("usuarios.index")->with("bien", "Registro realizado");
         } catch (\Exception $e) {
@@ -170,7 +146,7 @@ class UsuarioController extends Controller
 
     public function show(User $user)
     {
-        return response()->JSON($user->load(["cliente"]));
+        return response()->JSON($user);
     }
 
     public function actualizaAcceso(User $user, Request $request)
@@ -183,41 +159,18 @@ class UsuarioController extends Controller
         ]);
     }
 
-    public function update(User $user, Request $request)
+    /**
+     * Update user
+     *
+     * @param User $user
+     * @param UserUpdateRequest $request
+     * @return RedirectResponse|Response
+     */
+    public function update(User $user, UserUpdateRequest $request): RedirectResponse|Response
     {
-        $this->validacion['usuario'] = 'required|min:4|unique:users,usuario,' . $user->id;
-        if ($request->password && trim($request->password)) {
-            $this->validacion['password'] = 'required|min:4';
-        } else {
-            unset($request["password"]);
-        }
-        $request->validate($this->validacion, $this->mensajes);
         DB::beginTransaction();
         try {
-            $datos_original = HistorialAccion::getDetalleRegistro($user, "users");
-            $user->update([
-                "usuario" => mb_strtoupper($request->usuario),
-                "nombres" => mb_strtoupper($request->nombres),
-                "apellidos" => mb_strtoupper($request->apellidos),
-                "acceso" => $request->acceso,
-            ]);
-            if ($request->password && trim($request->password)) {
-                $user->password = Hash::make($request->password);
-            }
-            $user->save();
-
-            $datos_nuevo = HistorialAccion::getDetalleRegistro($user, "users");
-            HistorialAccion::create([
-                'user_id' => Auth::user()->id,
-                'accion' => 'MODIFICACIÓN',
-                'descripcion' => 'EL USUARIO ' . Auth::user()->usuario . ' MODIFICÓ UN USUARIO',
-                'datos_original' => $datos_original,
-                'datos_nuevo' => $datos_nuevo,
-                'modulo' => 'USUARIOS',
-                'fecha' => date('Y-m-d'),
-                'hora' => date('H:i:s')
-            ]);
-
+            $this->userService->actualizar($request->validated(), $user);
             DB::commit();
             return redirect()->route("usuarios.index")->with("bien", "Registro actualizado");
         } catch (\Exception $e) {
@@ -229,34 +182,12 @@ class UsuarioController extends Controller
         }
     }
 
-    public function actualizaPassword(User $user, Request $request)
+    public function actualizaPassword(User $user, UserPasswordRequest $request)
     {
-        $request->validate([
-            "password" => "required"
-        ]);
         DB::beginTransaction();
         try {
-            $datos_original = HistorialAccion::getDetalleRegistro($user, "users");
-            $user->password = Hash::make($request->password);
-            $user->save();
-
-            $datos_nuevo = HistorialAccion::getDetalleRegistro($user, "users");
-            HistorialAccion::create([
-                'user_id' => Auth::user()->id,
-                'accion' => 'MODIFICACIÓN',
-                'descripcion' => 'EL USUARIO ' . Auth::user()->usuario . ' MODIFICÓ UN LA CONTRASEÑA DE UN USUARIO',
-                'datos_original' => $datos_original,
-                'datos_nuevo' => $datos_nuevo,
-                'modulo' => 'USUARIOS',
-                'fecha' => date('Y-m-d'),
-                'hora' => date('H:i:s')
-            ]);
-
-
+            $this->userService->actualizarPassword($request->validated(), $user);
             DB::commit();
-            if ($user->tipo == 'CLIENTE') {
-                return redirect()->route("clientes.index")->with("bien", "Registro actualizado");
-            }
             return redirect()->route("usuarios.index")->with("bien", "Registro actualizado");
         } catch (\Exception $e) {
             DB::rollBack();
@@ -267,33 +198,17 @@ class UsuarioController extends Controller
         }
     }
 
-    public function destroy(User $user)
+    /**
+     * Delete user
+     *
+     * @param User $user
+     * @return JsonResponse|Response
+     */
+    public function destroy(User $user): JsonResponse|Response
     {
         DB::beginTransaction();
         try {
-            // $usos = Venta::where("user_id", $user->id)->get();
-            // if (count($usos) > 0) {
-            //     throw ValidationException::withMessages([
-            //         'error' =>  "No es posible eliminar este registro porque esta siendo utilizado por otros registros",
-            //     ]);
-            // }
-
-            // $antiguo = $user->foto;
-            // if ($antiguo != 'default.png') {
-            //     \File::delete(public_path() . '/imgs/users/' . $antiguo);
-            // }
-            $datos_original = HistorialAccion::getDetalleRegistro($user, "users");
-            $user->status = 0;
-            $user->save();
-            HistorialAccion::create([
-                'user_id' => Auth::user()->id,
-                'accion' => 'ELIMINACIÓN',
-                'descripcion' => 'EL USUARIO ' . Auth::user()->usuario . ' ELIMINÓ UN USUARIO',
-                'datos_original' => $datos_original,
-                'modulo' => 'USUARIOS',
-                'fecha' => date('Y-m-d'),
-                'hora' => date('H:i:s')
-            ]);
+            $this->userService->eliminar($user);
             DB::commit();
             return response()->JSON([
                 'sw' => true,

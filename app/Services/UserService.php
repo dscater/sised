@@ -37,22 +37,18 @@ class UserService
      */
     public function crear(array $datos): User
     {
-        $total_sedes = Sede::get()->count();
-        $sedes_todo = 0;
-        if ($total_sedes === count($datos["array_sedes_id"])) {
-            $sedes_todo = 1;
-        }
-
         $user = User::create([
             "usuario" => $datos["correo"],
-            "nombres" => mb_strtoupper($datos["nombres"]),
-            "apellidos" => mb_strtoupper($datos["apellidos"]),
+            "nombre" => mb_strtoupper($datos["nombre"]),
+            "paterno" => mb_strtoupper($datos["paterno"]),
+            "materno" => mb_strtoupper($datos["materno"]),
+            "dir" => mb_strtoupper($datos["dir"]),
             "ci" => $datos["ci"],
             "ci_exp" => $datos["ci_exp"],
+            "fono" => $datos["fono"],
             "correo" => $datos["correo"],
             "password" => $datos["ci"],
-            "role_id" => $datos["role_id"],
-            "sedes_todo" => $sedes_todo,
+            "tipo" => $datos["tipo"],
             "acceso" => $datos["acceso"],
             "fecha_registro" => date("Y-m-d")
         ]);
@@ -64,16 +60,6 @@ class UserService
 
         // registrar accion
         $this->historialAccionService->registrarAccion($this->modulo, "CREACIÓN", "REGISTRO UN USUARIO", $user);
-
-        // registrar sedes
-        if ($sedes_todo === 0) {
-            $user->sedes()->sync($datos["array_sedes_id"]);
-            // registrar sedes asignadas
-            $sedes_original = [
-                "sedes" => $user->sedes->pluck("id")
-            ];
-            $this->historialAccionService->registrarAccionRelaciones($this->modulo, "CREACIÓN", "REGISTRO LAS SEDES DEL USUARIO " . $user->usuario, $sedes_original);
-        }
 
         return $user;
     }
@@ -89,45 +75,28 @@ class UserService
     {
         $old_user = User::find($user->id);
 
-        $total_sedes = Sede::get()->count();
-        $sedes_todo = 0;
-        if ($total_sedes === count($datos["array_sedes_id"])) {
-            $sedes_todo = 1;
-        }
-
         $user->update([
             "usuario" => $datos["correo"],
-            "nombres" => mb_strtoupper($datos["nombres"]),
-            "apellidos" => mb_strtoupper($datos["apellidos"]),
+            "nombre" => mb_strtoupper($datos["nombre"]),
+            "paterno" => mb_strtoupper($datos["paterno"]),
+            "materno" => mb_strtoupper($datos["materno"]),
+            "dir" => mb_strtoupper($datos["dir"]),
             "ci" => $datos["ci"],
             "ci_exp" => $datos["ci_exp"],
+            "fono" => $datos["fono"],
             "correo" => $datos["correo"],
-            "role_id" => $datos["role_id"],
-            "sedes_todo" => $sedes_todo,
+            "tipo" => $datos["tipo"],
             "acceso" => $datos["acceso"],
             "fecha_registro" => date("Y-m-d")
         ]);
 
+        Log::debug("AA");
         // cargar foto
-        if ($datos["foto"] && !is_string($datos["foto"])) {
+        if (!is_string($datos["foto"]) && $datos["foto"]) {
             $this->cargarFoto($user, $datos["foto"]);
         }
-
-        // registrar sedes
-        if ($sedes_todo === 0) {
-            $sedes_original = [
-                "sedes" => $user->sedes->pluck("id")
-            ];
-            $changes = $user->sedes()->sync($datos["array_sedes_id"]);
-            if (!empty($changes['attached']) || !empty($changes['detached']) || !empty($changes['updated'])) {
-                // Se detectó un cambio en la relación
-                // Log::info("Sedes actualizadas para el usuario {$user->id}", $changes);
-                $this->historialAccionService->registrarAccionRelaciones($this->modulo, "MODIFICACIÓN", "ACTUALIZO LAS SEDES DEL USUARIO " . $user->usuario, $sedes_original, $changes);
-            }
-        }
-
         // registrar accion
-        $this->historialAccionService->registrarAccion($this->modulo, "MODIFICACIÓN", "ACTUALIZÓ UN USUARIO", $old_user, $user->withoutRelations());
+        $this->historialAccionService->registrarAccion($this->modulo, "MODIFICACIÓN", "ACTUALIZÓ UN USUARIO", $old_user, $user);
 
         return $user;
     }
@@ -156,7 +125,7 @@ class UserService
     public function cargarFoto(User $user, UploadedFile $foto): void
     {
         if ($user->foto) {
-            \File::delete(public_path("imgs/users/" . $this->user->foto));
+            \File::delete(public_path("imgs/users/" . $user->foto));
         }
 
         $nombre = $user->id . time();

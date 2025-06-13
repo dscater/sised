@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost:3306
--- Tiempo de generación: 08-06-2025 a las 22:50:30
+-- Tiempo de generación: 13-06-2025 a las 20:11:14
 -- Versión del servidor: 8.0.30
 -- Versión de PHP: 8.2.22
 
@@ -99,12 +99,20 @@ CREATE TABLE `evidencias` (
   `fecha_hallazgo` date NOT NULL,
   `hora_hallazgo` time NOT NULL,
   `lugar_recoleccion` varchar(800) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `personar_recolector` varchar(300) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `persona_recolector` varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `herramienta_utilizada` varchar(300) COLLATE utf8mb4_unicode_ci NOT NULL,
   `fecha_registro` date DEFAULT NULL,
+  `status` int NOT NULL DEFAULT '1',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `evidencias`
+--
+
+INSERT INTO `evidencias` (`id`, `codigo`, `descripcion`, `nombre_creador`, `fecha_creacion`, `hora_creacion`, `origen_archivo`, `fecha_hallazgo`, `hora_hallazgo`, `lugar_recoleccion`, `persona_recolector`, `herramienta_utilizada`, `fecha_registro`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'EVI01', 'DESC', 'JUAN PERES', '2025-01-01', '09:00:00', 'ORIGEN ARCHIVO', '2025-01-01', '05:00:00', 'LUGAR RECOLECCION', 'JUAN PERES', 'HERRAMIENTA USADA', '2025-06-13', 1, '2025-06-13 20:08:42', '2025-06-13 20:08:42');
 
 -- --------------------------------------------------------
 
@@ -120,6 +128,16 @@ CREATE TABLE `evidencia_archivos` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `evidencia_archivos`
+--
+
+INSERT INTO `evidencia_archivos` (`id`, `evidencia_id`, `archivo`, `hash_archivo`, `created_at`, `updated_at`) VALUES
+(1, 1, '011749845322.mp4', 'f20619921b55a3ee2d3ceebbad4dbba83dd8b6ba6c0414b152ed7f6f050f1761', '2025-06-13 20:08:42', '2025-06-13 20:08:42'),
+(2, 1, '111749845322.pdf', 'df1c9ac8f3bdf88b7e8ad1860ae1ab5833bd1328649e4fc4b16f03e592e7eca9', '2025-06-13 20:08:42', '2025-06-13 20:08:42'),
+(3, 1, '211749845322.docx', 'b30efc6534ae1c0c65102d96e379ea9f1e879cbb881d666821b87fe23d8e6724', '2025-06-13 20:08:42', '2025-06-13 20:08:42'),
+(4, 1, '311749845322.jpg', 'd32bf753da66cccf03da6e01736ecfaf76ce806e18d6afdadff124e86478091e', '2025-06-13 20:08:42', '2025-06-13 20:08:42');
 
 -- --------------------------------------------------------
 
@@ -142,6 +160,15 @@ CREATE TABLE `historial_accions` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `historial_accions`
+--
+
+INSERT INTO `historial_accions` (`id`, `user_id`, `accion`, `descripcion`, `datos_original`, `datos_nuevo`, `modulo`, `fecha`, `hora`, `sistema`, `ip`, `created_at`, `updated_at`) VALUES
+(1, 1, 'CREACIÓN', 'EL USUARIO admin REGISTRO UN USUARIO', '{\"ci\": \"123456\", \"id\": 11, \"dir\": \"LOS OLIVOS\", \"fono\": \"65656565\", \"foto\": \"111749839223.jpg\", \"tipo\": \"ADMINISTRADOR\", \"acceso\": \"1\", \"ci_exp\": \"LP\", \"correo\": \"juan@gmail.com\", \"nombre\": \"JUAN\", \"materno\": \"MAMANI\", \"paterno\": \"PERES\", \"usuario\": \"juan@gmail.com\", \"created_at\": \"2025-06-13T18:27:03.000000Z\", \"updated_at\": \"2025-06-13T18:27:03.000000Z\", \"fecha_registro\": \"2025-06-13\"}', NULL, 'USUARIOS', '2025-06-13', '14:27:03', 'Equipo Escritorio - S.O. Windows - Navegador Chrome', '127.0.0.1', '2025-06-13 18:27:03', '2025-06-13 18:27:03'),
+(2, 1, 'CREACIÓN', 'EL USUARIO admin REGISTRO UN USUARIO', '{\"ci\": \"123456\", \"id\": 2, \"dir\": \"ZONA LOS OLIVOS\", \"fono\": \"76767676\", \"foto\": \"21749839361.jpg\", \"tipo\": \"ADMINISTRADOR\", \"acceso\": \"1\", \"ci_exp\": \"LP\", \"correo\": \"juan@gmail.com\", \"nombre\": \"JUAN\", \"materno\": \"MAMANI\", \"paterno\": \"PERES\", \"usuario\": \"juan@gmail.com\", \"created_at\": \"2025-06-13T18:29:21.000000Z\", \"updated_at\": \"2025-06-13T18:29:21.000000Z\", \"fecha_registro\": \"2025-06-13\"}', NULL, 'USUARIOS', '2025-06-13', '14:29:21', 'Equipo Escritorio - S.O. Windows - Navegador Chrome', '127.0.0.1', '2025-06-13 18:29:21', '2025-06-13 18:29:21'),
+(3, 1, 'MODIFICACIÓN', 'EL USUARIO admin ACTUALIZÓ UN USUARIO', '{\"ci\": \"123456\", \"id\": 2, \"dir\": \"ZONA LOS OLIVOS\", \"fono\": \"76767676\", \"foto\": \"21749839361.jpg\", \"tipo\": \"ADMINISTRADOR\", \"acceso\": 1, \"ci_exp\": \"LP\", \"correo\": \"juan@gmail.com\", \"nombre\": \"JUAN\", \"status\": 1, \"materno\": \"MAMANI\", \"paterno\": \"PERES\", \"usuario\": \"juan@gmail.com\", \"created_at\": \"2025-06-13T18:29:21.000000Z\", \"updated_at\": \"2025-06-13T18:29:21.000000Z\", \"fecha_registro\": \"2025-06-13\"}', '{\"ci\": \"123456\", \"id\": 2, \"dir\": \"ZONA LOS OLIVOS\", \"fono\": \"76767676\", \"foto\": \"21749839909.jpg\", \"tipo\": \"ADMINISTRADOR\", \"acceso\": \"1\", \"ci_exp\": \"LP\", \"correo\": \"juan@gmail.com\", \"nombre\": \"JUAN\", \"status\": 1, \"materno\": \"MAMANI\", \"paterno\": \"PERES\", \"usuario\": \"juan@gmail.com\", \"created_at\": \"2025-06-13T18:29:21.000000Z\", \"updated_at\": \"2025-06-13T18:38:29.000000Z\", \"fecha_registro\": \"2025-06-13\"}', 'USUARIOS', '2025-06-13', '14:38:29', 'Equipo Escritorio - S.O. Windows - Navegador Chrome', '127.0.0.1', '2025-06-13 18:38:29', '2025-06-13 18:38:29');
 
 -- --------------------------------------------------------
 
@@ -200,7 +227,8 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `usuario`, `nombre`, `paterno`, `materno`, `ci`, `ci_exp`, `dir`, `correo`, `fono`, `password`, `acceso`, `tipo`, `foto`, `fecha_registro`, `status`, `created_at`, `updated_at`) VALUES
-(1, 'admin', 'admin', 'admin', NULL, '0', '', '', NULL, '', '$2y$12$65d4fgZsvBV5Lc/AxNKh4eoUdbGyaczQ4sSco20feSQANshNLuxSC', 1, 'ADMINISTRADOR', NULL, '2025-06-06', 1, NULL, NULL);
+(1, 'admin', 'admin', 'admin', NULL, '0', '', '', NULL, '', '$2y$12$65d4fgZsvBV5Lc/AxNKh4eoUdbGyaczQ4sSco20feSQANshNLuxSC', 1, 'ADMINISTRADOR', NULL, '2025-06-06', 1, NULL, NULL),
+(2, 'juan@gmail.com', 'JUAN', 'PERES', 'MAMANI', '123456', 'LP', 'ZONA LOS OLIVOS', 'juan@gmail.com', '76767676', '$2y$12$c/SadN/8ivZnWH3UsPsIu.rJaa31GisVFIFXDRhtigPWxmr14Vu5.', 1, 'ADMINISTRADOR', '21749839909.jpg', '2025-06-13', 1, '2025-06-13 18:29:21', '2025-06-13 18:38:29');
 
 --
 -- Índices para tablas volcadas
@@ -285,19 +313,19 @@ ALTER TABLE `control_integridads`
 -- AUTO_INCREMENT de la tabla `evidencias`
 --
 ALTER TABLE `evidencias`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `evidencia_archivos`
 --
 ALTER TABLE `evidencia_archivos`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `historial_accions`
 --
 ALTER TABLE `historial_accions`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `migrations`
@@ -309,7 +337,7 @@ ALTER TABLE `migrations`
 -- AUTO_INCREMENT de la tabla `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Restricciones para tablas volcadas

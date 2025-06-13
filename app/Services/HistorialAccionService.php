@@ -6,6 +6,7 @@ use App\Models\HistorialAccion;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Jenssegers\Agent\Agent;
 
 class HistorialAccionService
 {
@@ -77,6 +78,18 @@ class HistorialAccionService
 
     private function crearAccion(array $datos): void
     {
+        $agent = new Agent();
+
+        $dispositivo = $agent->isMobile() ? 'Móvil' : 'Escritorio'; // Detectar si es móvil o escritorio
+        $sistemaOperativo = $agent->platform(); // Obtener el sistema operativo (Ej: Windows, Linux, macOS, iOS, Android)
+        $navegador = $agent->browser(); // Obtener el navegador (Ej: Chrome, Firefox, Safari)
+        $ip = request()->ip(); // Obtener la IP del usuario
+
+        $desc_sistema = "Equipo " . $dispositivo;
+        $desc_sistema .= " - S.O. " . $sistemaOperativo;
+        $desc_sistema .= " - Navegador " . $navegador;
+
+
         HistorialAccion::create([
             "user_id" => $datos["user_id"],
             "accion" => $datos["accion"],
@@ -85,7 +98,9 @@ class HistorialAccionService
             'datos_nuevo' => $datos["datos_nuevo"],
             'modulo' => $datos["modulo"],
             'fecha' => date('Y-m-d'),
-            'hora' => date('H:i:s')
+            'hora' => date('H:i:s'),
+            "sistema" => $desc_sistema,
+            "ip" => $ip
         ]);
     }
 }
