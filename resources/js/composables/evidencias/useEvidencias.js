@@ -15,6 +15,7 @@ const oEvidencia = reactive({
     herramienta_utilizada: "",
     archivos: [],
     eliminados: [],
+    cargados: [],
     _method: "POST",
 });
 
@@ -33,8 +34,9 @@ export const useEvidencias = () => {
             oEvidencia.lugar_recoleccion = item.lugar_recoleccion;
             oEvidencia.persona_recolector = item.persona_recolector;
             oEvidencia.herramienta_utilizada = item.herramienta_utilizada;
-            oEvidencia.archivos = item.archivos;
+            oEvidencia.archivos = [];
             oEvidencia.eliminados = [];
+            oEvidencia.cargados = item.archivos;
             oEvidencia._method = "PUT";
             return oEvidencia;
         }
@@ -66,6 +68,7 @@ export const useEvidencias = () => {
         oEvidencia.herramienta_utilizada = "";
         oEvidencia.archivos = [];
         oEvidencia.eliminados = [];
+        oEvidencia.cargados = [];
         oEvidencia._method = "POST";
     };
 

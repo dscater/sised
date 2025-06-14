@@ -11,15 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('evidencia_archivos', function (Blueprint $table) {
+        Schema::create('notificacions', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger("evidencia_id");
-            $table->string("archivo", 255);
-            $table->string("hash_archivo", 800);
-            $table->integer("status");
+            $table->text("descripcion");
+            $table->date("fecha");
+            $table->time("hora");
+            $table->string("modulo");
+            $table->unsignedBigInteger("registro_id");
             $table->timestamps();
-
-            $table->foreign("evidencia_id")->on("evidencias")->references("id");
         });
     }
 
@@ -28,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('evidencia_archivos');
+        Schema::dropIfExists('notificacions');
     }
 };

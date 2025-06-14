@@ -109,6 +109,10 @@ class User extends Authenticatable
     }
 
     // RELACIONES
+    public function notificacions()
+    {
+        return $this->belongsToMany(Notificacion::class, 'notificacion_users', "user_id", "notificacion_id")->withTimestamps()->withPivot(["visto"]);
+    }
 
     // FUNCIONES
     public static function getNombreUsuario($nom, $apep)

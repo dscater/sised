@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\ConfiguracionController;
 use App\Http\Controllers\EvidenciaController;
 use App\Http\Controllers\InicioController;
+use App\Http\Controllers\NotificacionController;
 use App\Http\Controllers\PortalController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReporteController;
@@ -76,6 +77,11 @@ Route::middleware(['auth', 'permisoUsuario'])->prefix("admin")->group(function (
     Route::resource("evidencias", EvidenciaController::class)->only(
         ["index", "store", "show", "update", "destroy"]
     );
+
+    // NOTIFICACIONS
+    Route::get("notificacions/listadoPorUsuario", [NotificacionController::class, "listadoPorUsuario"])->name("notificacions.listadoPorUsuario");
+    Route::get("notificacions", [NotificacionController::class, "index"])->name("notificacions.index");
+    Route::get("notificacions/show/{notificacion}", [NotificacionController::class, "show"])->name("notificacions.show");
 
     // REPORTES
     Route::get('reportes/usuarios', [ReporteController::class, 'usuarios'])->name("reportes.usuarios");

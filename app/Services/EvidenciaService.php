@@ -155,11 +155,7 @@ class EvidenciaService
 
         // actualizar archivos
         if (!empty($datos["archivos"])) {
-            foreach ($datos["archivos"] as $key => $imagen) {
-                if ($imagen["id"] == 0) {
-                    $this->evidenciaArchivoService->guardarArchivoEvidencia($evidencia, $imagen["file"], $key);
-                }
-            }
+            $this->evidenciaArchivoService->guardarArchivosEvidencia($datos["archivos"], $evidencia);
         }
 
         // archivos eliminados
@@ -168,6 +164,17 @@ class EvidenciaService
                 $evidenciaArchivo = EvidenciaArchivo::find($eliminado);
                 if ($evidenciaArchivo) {
                     $this->evidenciaArchivoService->eliminarArchivoEvidencia($evidenciaArchivo);
+                }
+            }
+        }
+
+        // archivos cargados
+        if (!empty($datos["cargados"])) {
+            foreach ($datos["cargados"] as $key => $cargado) {
+                $evidenciaArchivo = EvidenciaArchivo::find($cargado["id"]);
+                if (!is_string($cargado["archivo"])) {
+                    // actualizar
+                    $this->evidenciaArchivoService->actualizarArchivoEvidencia($evidenciaArchivo, $cargado["archivo"]);
                 }
             }
         }

@@ -31,8 +31,6 @@ watch(
                 .classList.add("modal-open");
             form = useForm(oEvidencia);
             if (form.id != 0) {
-                cargarUrbanizacion();
-                cargarManzanos();
             }
         }
     }
@@ -45,15 +43,6 @@ watch(
 );
 
 const { flash } = usePage().props;
-
-const listMunicipios = ref([]);
-const listTipoCalle = ref([
-    { value: "Pavimentada", label: "Pavimentada" },
-    { value: "Loseta", label: "Loseta" },
-    { value: "Empedrada", label: "Empedrada" },
-    { value: "Grava", label: "Grava" },
-    { value: "Tierra", label: "Tierra" },
-]);
 
 const tituloDialog = computed(() => {
     return accion.value == 0
@@ -115,6 +104,37 @@ const cerrarDialog = () => {
 };
 
 const cargarListas = () => {};
+
+// Activar el input file oculto
+function triggerFileInput(index) {
+    console.log(index);
+    const input = document.getElementById(`fileInput${index}`);
+    if (input) input.click();
+}
+
+// Procesar el nuevo archivo
+function handleFileChange(event, index) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    // Actualizar nombre del archivo
+    form.cargados[index].archivo = file;
+    form.cargados[index].name = file.name;
+    form.cargados[index].hash_archivo = ">Por modificar<";
+
+    // Crear URL temporal para previsualización
+    const ext = file.name.split(".").pop().toLowerCase();
+    const esImagen = ["jpg", "jpeg", "png", "webp", "gif"].includes(ext);
+
+    form.cargados[index].url_file = esImagen
+        ? URL.createObjectURL(file)
+        : url_assets + "/imgs/attach.png";
+}
+const eliminarArchivo = (index) => {
+    const archivo = form.cargados[index];
+    form.eliminados.push(archivo.id);
+    form.cargados.splice(index, 1);
+};
 
 const detectaArchivos = (files) => {
     form.archivos = files;
@@ -373,13 +393,66 @@ onMounted(() => {
                                 </ul>
                             </div>
                         </div>
+                        <div class="row mt-2" v-if="form.id != 0">
+                            <label class="h5 font-weight-bold"
+                                >Archivos cargados:</label
+                            >
+                            <div
+                                class="col-md-3 img_cargado"
+                                v-for="(item, index) in form.cargados"
+                            >
+                                <div class="imagen">
+                                    <img :src="item.url_file" alt="" class="" />
+                                </div>
+                                <div class="descripcion">
+                                    <p :title="item.archivo" class="mb-0">
+                                        {{ item.name }}
+                                    </p>
+                                    <p :title="item.hash_archivo">
+                                        {{ item.hash_archivo }}
+                                    </p>
+                                </div>
+                                <div class="acciones">
+                                    <a
+                                        :href="item.url_archivo"
+                                        class="btn btn-sm btn-outline-primary"
+                                        target="_blank"
+                                    >
+                                        <i class="fa fa-download"></i>
+                                    </a>
+                                    <button
+                                        type="button"
+                                        class="btn btn-sm btn-outline-warning"
+                                        @click.prevent="triggerFileInput(index)"
+                                    >
+                                        <i class="fa fa-edit"></i>
+                                    </button>
+                                    <input
+                                        type="file"
+                                        class="d-none"
+                                        :id="'fileInput' + index"
+                                        @change="
+                                            handleFileChange($event, index)
+                                        "
+                                    />
+                                    <button
+                                        type="button"
+                                        class="btn btn-sm btn-danger"
+                                        @click.prevent="eliminarArchivo(index)"
+                                    >
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <hr class="mb-1 mt-2" />
+                        </div>
                         <div class="row mt-2">
                             <div class="col-12">
                                 <label class="h5 font-weight-bold"
                                     >Adjuntar archivos:</label
                                 >
                                 <MiDropZone
-                                    :files="form.archivos"
+                                    :files="form.id == 0 ? form.archivos : []"
                                     @UpdateFiles="detectaArchivos"
                                     @addEliminados="detectaEliminados"
                                 ></MiDropZone>
@@ -415,3 +488,29 @@ onMounted(() => {
         </div>
     </div>
 </template>
+<style scoped>
+.img_cargado {
+    align-items: center;
+}
+.img_cargado .imagen {
+    height: 90px;
+    display: flex;
+    justify-content: center;
+}
+
+.img_cargado .imagen img {
+    width: 100%;
+    max-height: 90px;
+    object-fit: contain;
+}
+.img_cargado .descripcion p {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.img_cargado .acciones {
+    display: flex;
+    gap: 3px;
+}
+</style>

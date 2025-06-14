@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('control_integridads', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger("evidencia_id");
+            $table->unsignedBigInteger("evidencia_archivo_id");
             $table->date("fecha_alteracion");
             $table->time("hora_alteracion");
             $table->string("encriptado_original");
@@ -22,6 +23,7 @@ return new class extends Migration
             $table->timestamps();
 
             $table->foreign("evidencia_id")->on("evidencias")->references("id");
+            $table->foreign("evidencia_archivo_id")->on("evidencia_archivos")->references("id");
         });
     }
 

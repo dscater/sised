@@ -45,6 +45,6 @@ class Evidencia extends Model
     // RELACIONES
     public function archivos()
     {
-        return $this->hasMany(EvidenciaArchivo::class, 'evidencia_id');
+        return $this->hasMany(EvidenciaArchivo::class, 'evidencia_id')->where("status", 1);
     }
 }

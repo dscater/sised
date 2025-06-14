@@ -39,24 +39,10 @@ const open_menu_mobile = () => {
 };
 
 const getNotificacions = () => {
-    axios
-        .get(route("notificacions.listadoPorUsuario", props.auth.user.id), {
-            params: {
-                id: ultimo.value,
-            },
-        })
-        .then((response) => {
-            let res = [
-                ...response.data.notificacion_users,
-                ...listNotificacions.value,
-            ];
-            listNotificacions.value = res;
-            ultimo.value = response.data.ultimo;
-            sin_ver.value = response.data.sin_ver;
-            // console.log(listNotificacions.value);
-            // console.log(ultimo.value);
-            // console.log(sin_ver.value);
-        });
+    axios.get(route("notificacions.listadoPorUsuario")).then((response) => {
+        listNotificacions.value = response.data.notificacion_users;
+        sin_ver.value = response.data.sin_ver;
+    });
 };
 
 const muestra_notificacions = ref(false);
@@ -66,14 +52,9 @@ const mostrarNotificaciones = () => {
 const intervalNotificaciones = ref(null);
 
 onMounted(() => {
-    if (
-        props.auth.user.permisos.includes("publicacions.index") &&
-        !props.auth.user.permisos.includes("publicacions.todos")
-    ) {
-        intervalNotificaciones.value = setInterval(() => {
-            getNotificacions();
-        }, 1500);
-    }
+    intervalNotificaciones.value = setInterval(() => {
+        getNotificacions();
+    }, 1500);
 
     url_assets = props.url_assets;
     url_principal = props.url_principal;
@@ -106,13 +87,7 @@ onBeforeUnmount(() => {
         <!-- END navbar-header -->
         <!-- BEGIN header-nav -->
         <div class="navbar-nav text-white">
-            <div
-                class="navbar-item dropdown"
-                v-if="
-                    props.auth.user.permisos.includes('publicacions.index') &&
-                    !props.auth.user.permisos.includes('publicacions.todos')
-                "
-            >
+            <div class="navbar-item dropdown">
                 <a
                     href="#"
                     data-bs-toggle="dropdown"
@@ -127,6 +102,36 @@ onBeforeUnmount(() => {
                         sin_ver
                     }}</span>
                 </a>
+
+                <div
+                    class="dropdown-menu media-list dropdown-menu-end notificacions"
+                    :class="{
+                        show: muestra_notificacions,
+                    }"
+                >
+                    <div class="dropdown-header">
+                        NOTIFICACIONES ({{ sin_ver }})
+                    </div>
+                    <Link
+                        class="dropdown-item media"
+                        v-for="item in listNotificacions"
+                        :href="item.url_notificacion ?? ''"
+                    >
+                        <div class="media-left">
+                            <i
+                                class="fa fa-info-circle media-object bg-gray-400"
+                            ></i>
+                        </div>
+                        <div class="media-body">
+                            <p class="media-heading">
+                                <span v-html="item.descripcion"></span>
+                            </p>
+                            <div class="text-muted fs-10px">
+                                {{ item.hace }}
+                            </div>
+                        </div>
+                    </Link>
+                </div>
             </div>
             <div class="navbar-item navbar-user dropdown">
                 <a

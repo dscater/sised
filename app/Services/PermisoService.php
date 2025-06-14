@@ -8,6 +8,11 @@ class PermisoService
 {
     protected $arrayPermisos = [
         "ADMINISTRADOR" => [
+            "notificacions.listadoPorUsuario",
+            "notificacions.index",
+            "notificacions.listado",
+            "notificacions.show",
+
             "usuarios.api",
             "municipios.listado",
             "usuarios.index",

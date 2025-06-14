@@ -14,9 +14,10 @@ class EvidenciaArchivo extends Model
         "evidencia_id",
         "archivo",
         "hash_archivo",
+        "status"
     ];
 
-    protected $appends = ["url_archivo", "archivo_b64", "url_archivo", "url_file", "name", "ext"];
+    protected $appends = ["url_archivo", "archivo_b64", "url_file", "name", "ext"];
 
     public function getExtAttribute()
     {
@@ -42,14 +43,6 @@ class EvidenciaArchivo extends Model
     public function getUrlArchivoAttribute()
     {
         return asset("evidencias/" . $this->archivo);
-    }
-
-    public function getUrlImagenAttribute()
-    {
-        if ($this->archivo) {
-            return asset("evidencias/" . $this->archivo);
-        }
-        return asset("evidencias/default.png");
     }
 
     public function getArchivoB64Attribute()
