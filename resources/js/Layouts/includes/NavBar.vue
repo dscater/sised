@@ -115,7 +115,7 @@ onBeforeUnmount(() => {
                     <Link
                         class="dropdown-item media"
                         v-for="item in listNotificacions"
-                        :href="item.url_notificacion ?? ''"
+                        :href="route('notificacions.show', item.id)"
                     >
                         <div class="media-left">
                             <i

@@ -40,4 +40,9 @@ class Notificacion extends Model
         $tiempo = $this->created_at->diffForHumans();
         return $tiempo;
     }
+
+    public function registroEvidenciaArchivo()
+    {
+        return $this->belongsTo(EvidenciaArchivo::class, 'registro_id');
+    }
 }

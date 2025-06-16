@@ -23,46 +23,58 @@ const columns = [
         data: "id",
     },
     {
-        title: "DESCRIPCIÓN",
-        data: "descripcion",
+        title: "CÓDIGO EVIDENCIA",
+        data: "evidencia.codigo",
+    },
+    {
+        title: "FECHA Y HORA DE ALTERACIÓN",
+        data: "fecha_hora_alteracion_t",
+    },
+    {
+        title: "ENCRIPTADO ORIGINAL",
+        data: "encriptado_original",
+    },
+    {
+        title: "ENCRIPTADO ORIGINAL",
+        data: "encriptado_alteracion",
     },
     {
         title: "FECHA DE REGISTRO",
-        data: "fecha_hora_t",
+        data: "fecha_registro_t",
     },
-    {
-        title: "ACCIONES",
-        data: null,
-        render: function (data, type, row) {
-            let buttons = ``;
+    // {
+    //     title: "ACCIONES",
+    //     data: null,
+    //     render: function (data, type, row) {
+    //         let buttons = ``;
 
-            if (
-                props_page.auth?.user.permisos == "*" ||
-                props_page.auth?.user.permisos.includes("notificacions.show")
-            ) {
-                buttons += `<button class="mx-0 rounded-0 btn btn-warning ver" data-id="${row.id}"><i class="fa fa-eye"></i></button>`;
-            }
+    //         if (
+    //             props_page.auth?.user.permisos == "*" ||
+    //             props_page.auth?.user.permisos.includes("control_integridads.show")
+    //         ) {
+    //             buttons += `<button class="mx-0 rounded-0 btn btn-warning ver" data-id="${row.id}"><i class="fa fa-eye"></i></button>`;
+    //         }
 
-            return buttons;
-        },
-    },
+    //         return buttons;
+    //     },
+    // },
 ];
 const loading = ref(false);
 const accion_dialog = ref(0);
 const open_dialog = ref(false);
 
 const agregarRegistro = () => {
-    limpiarNotificacion();
+    limpiarControlIntegridad();
     accion_dialog.value = 0;
     open_dialog.value = true;
 };
 
 const accionesRow = () => {
     // ver
-    $("#table-notificacion").on("click", "button.ver", function (e) {
+    $("#table-control_integridad").on("click", "button.ver", function (e) {
         e.preventDefault();
         let id = $(this).attr("data-id");
-        router.get(route("notificacions.show", id));
+        router.get(route("control_integridads.show", id));
     });
 };
 
@@ -77,9 +89,9 @@ const updateDatatable = () => {
 
 onMounted(async () => {
     datatable = initDataTable(
-        "#table-notificacion",
+        "#table-control_integridad",
         columns,
-        route("notificacions.api")
+        route("control_integridads.api")
     );
     input_search = document.querySelector('input[type="search"]');
 
@@ -106,16 +118,16 @@ onBeforeUnmount(() => {
 });
 </script>
 <template>
-    <Head title="Notificaciones"></Head>
+    <Head title="Control de Integridad"></Head>
 
     <!-- BEGIN breadcrumb -->
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="javascript:;">Inicio</a></li>
-        <li class="breadcrumb-item active">Notificaciones</li>
+        <li class="breadcrumb-item active">Control de Integridad</li>
     </ol>
     <!-- END breadcrumb -->
     <!-- BEGIN page-header -->
-    <h1 class="page-header">Notificaciones</h1>
+    <h1 class="page-header">Control de Integridad</h1>
     <!-- END page-header -->
 
     <div class="row">
@@ -125,7 +137,7 @@ onBeforeUnmount(() => {
                 <!-- BEGIN panel-body -->
                 <div class="panel-body">
                     <table
-                        id="table-notificacion"
+                        id="table-control_integridad"
                         width="100%"
                         class="table table-striped table-bordered align-middle text-nowrap tabla_datos"
                     >

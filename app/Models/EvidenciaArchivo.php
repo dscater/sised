@@ -66,4 +66,9 @@ class EvidenciaArchivo extends Model
     {
         return $this->belongsTo(Evidencia::class, 'evidencia_id');
     }
+
+    public function control_integridad()
+    {
+        return $this->hasOne(ControlIntegridad::class, 'evidencia_archivo_id');
+    }
 }

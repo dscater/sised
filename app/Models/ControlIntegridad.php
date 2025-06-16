@@ -19,10 +19,16 @@ class ControlIntegridad extends Model
         "fecha_registro",
     ];
 
-    protected $appends = ["fecha_registro_t", "fecha_hora_alteracion_t"];
+    protected $appends = ["fecha_registro_t", "fecha_alteracion_t", "fecha_hora_alteracion_t"];
+
     public function getFechaHoraAlteracionTAttribute()
     {
         return date("d/m/Y H:i a", strtotime($this->fecha_alteracion . ' ' . $this->hora_alteracion));
+    }
+
+    public function getFechaAlteracionTAttribute()
+    {
+        return date("d/m/Y", strtotime($this->fecha_alteracion));
     }
 
     public function getFechaRegistroTAttribute()

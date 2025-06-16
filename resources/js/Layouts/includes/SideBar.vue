@@ -524,10 +524,43 @@ const logout = () => {
                     class="menu-header"
                     v-if="
                         user_logeado.permisos == '*' ||
-                        user_logeado.permisos.includes('usuarios.index')
+                        user_logeado.permisos.includes('usuarios.index') ||
+                        user_logeado.permisos.includes(
+                            'evidencias.visualizar'
+                        ) ||
+                        user_logeado.permisos.includes('evidencias.index') ||
+                        user_logeado.permisos.includes(
+                            'control_integridads.index'
+                        ) ||
+                        user_logeado.permisos.includes(
+                            'cadena_custodias.index'
+                        ) ||
+                        user_logeado.permisos.includes('notificacions.index')
                     "
                 >
                     ADMINISTRACIÓN
+                </div>
+                <div
+                    v-if="
+                        user_logeado.permisos == '*' ||
+                        user_logeado.permisos.includes('evidencias.visualizar')
+                    "
+                    class="menu-item"
+                    :class="[
+                        route_current == 'evidencias.visualizar'
+                            ? 'active'
+                            : 'none',
+                    ]"
+                >
+                    <Link
+                        :href="route('evidencias.visualizar')"
+                        class="menu-link"
+                    >
+                        <div class="menu-icon">
+                            <i class="fa fa-list"></i>
+                        </div>
+                        <div class="menu-text">Visualizar Evidencias</div>
+                    </Link>
                 </div>
                 <div
                     v-if="
@@ -546,21 +579,75 @@ const logout = () => {
                         <div class="menu-text">Evidencias</div>
                     </Link>
                 </div>
-                <div class="menu-item">
-                    <a href="" class="menu-link">
+                <div
+                    v-if="
+                        user_logeado.permisos == '*' ||
+                        user_logeado.permisos.includes('cadena_custodias.index')
+                    "
+                    class="menu-item"
+                    :class="[
+                        route_current == 'cadena_custodias.index'
+                            ? 'active'
+                            : 'none',
+                    ]"
+                >
+                    <Link
+                        :href="route('cadena_custodias.index')"
+                        class="menu-link"
+                    >
                         <div class="menu-icon">
                             <i class="fa fa-list"></i>
                         </div>
                         <div class="menu-text">Cadena de Custodia</div>
-                    </a>
+                    </Link>
                 </div>
-                <div class="menu-item">
-                    <a href="" class="menu-link">
+                <div
+                    v-if="
+                        user_logeado.permisos == '*' ||
+                        user_logeado.permisos.includes(
+                            'control_integridads.index'
+                        )
+                    "
+                    class="menu-item"
+                    :class="[
+                        route_current == 'control_integridads.index' ||
+                        route_current == 'control_integridads.show'
+                            ? 'active'
+                            : 'none',
+                    ]"
+                >
+                    <Link
+                        :href="route('control_integridads.index')"
+                        class="menu-link"
+                    >
                         <div class="menu-icon">
                             <i class="fa fa-list"></i>
                         </div>
-                        <div class="menu-text">Control de integridad</div>
-                    </a>
+                        <div class="menu-text">Control de Integridad</div>
+                    </Link>
+                </div>
+                <div
+                    v-if="
+                        user_logeado.permisos == '*' ||
+                        user_logeado.permisos.includes('notificacions.index')
+                    "
+                    class="menu-item"
+                    :class="[
+                        route_current == 'notificacions.index' ||
+                        route_current == 'notificacions.show'
+                            ? 'active'
+                            : 'none',
+                    ]"
+                >
+                    <Link
+                        :href="route('notificacions.index')"
+                        class="menu-link"
+                    >
+                        <div class="menu-icon">
+                            <i class="fa fa-bell"></i>
+                        </div>
+                        <div class="menu-text">Notificaciones</div>
+                    </Link>
                 </div>
                 <div
                     v-if="
@@ -584,7 +671,13 @@ const logout = () => {
                     v-if="
                         user_logeado.permisos == '*' ||
                         user_logeado.permisos.includes('reportes.usuarios') ||
-                        user_logeado.permisos.includes('reportes.evidencias')
+                        user_logeado.permisos.includes('reportes.evidencias') ||
+                        user_logeado.permisos.includes(
+                            'reportes.control_integridads'
+                        ) ||
+                        user_logeado.permisos.includes(
+                            'reportes.cadena_custodias'
+                        )
                     "
                 >
                     REPORTES
@@ -611,16 +704,19 @@ const logout = () => {
                 <div
                     v-if="
                         user_logeado.permisos == '*' ||
-                        user_logeado.permisos.includes('reportes.usuarios')
+                        user_logeado.permisos.includes('reportes.evidencias')
                     "
                     class="menu-item"
                     :class="[
-                        route_current == 'reportes.usuarios'
+                        route_current == 'reportes.evidencias'
                             ? 'active'
                             : 'none',
                     ]"
                 >
-                    <Link :href="route('reportes.usuarios')" class="menu-link">
+                    <Link
+                        :href="route('reportes.evidencias')"
+                        class="menu-link"
+                    >
                         <div class="menu-icon">
                             <i class="fa fa-file-alt"></i>
                         </div>
@@ -630,16 +726,21 @@ const logout = () => {
                 <div
                     v-if="
                         user_logeado.permisos == '*' ||
-                        user_logeado.permisos.includes('reportes.usuarios')
+                        user_logeado.permisos.includes(
+                            'reportes.cadena_custodias'
+                        )
                     "
                     class="menu-item"
                     :class="[
-                        route_current == 'reportes.usuarios'
+                        route_current == 'reportes.cadena_custodias'
                             ? 'active'
                             : 'none',
                     ]"
                 >
-                    <Link :href="route('reportes.usuarios')" class="menu-link">
+                    <Link
+                        :href="route('reportes.cadena_custodias')"
+                        class="menu-link"
+                    >
                         <div class="menu-icon">
                             <i class="fa fa-file-alt"></i>
                         </div>
@@ -649,16 +750,21 @@ const logout = () => {
                 <div
                     v-if="
                         user_logeado.permisos == '*' ||
-                        user_logeado.permisos.includes('reportes.usuarios')
+                        user_logeado.permisos.includes(
+                            'reportes.control_integridads'
+                        )
                     "
                     class="menu-item"
                     :class="[
-                        route_current == 'reportes.usuarios'
+                        route_current == 'reportes.control_integridads'
                             ? 'active'
                             : 'none',
                     ]"
                 >
-                    <Link :href="route('reportes.usuarios')" class="menu-link">
+                    <Link
+                        :href="route('reportes.control_integridads')"
+                        class="menu-link"
+                    >
                         <div class="menu-icon">
                             <i class="fa fa-file-alt"></i>
                         </div>

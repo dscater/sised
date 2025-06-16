@@ -4,24 +4,19 @@ import { Head, Link, router, usePage } from "@inertiajs/vue3";
 import { useAxios } from "@/composables/axios/useAxios";
 import { ref, onMounted, onBeforeUnmount, watch } from "vue";
 const props = defineProps({
-    notificacion: {
+    control_integridad: {
         type: Object,
         default: null,
-    },
-    controlIntegridad: {
-        type: Object,
-        defautl: null,
     },
 });
 const { props: props_page } = usePage();
 const { setLoading } = useApp();
 
 const cargarControlIntegridad = () => {};
-
 watch(
     () => props_page.notificacion.id,
     (newId, oldId) => {
-        router.reload(); 
+        router.reload();
     }
 );
 
@@ -33,25 +28,27 @@ onMounted(() => {
 onBeforeUnmount(() => {});
 </script>
 <template>
-    <Head title="Notificacions"></Head>
+    <Head title="ControlIntegridads"></Head>
 
     <!-- BEGIN breadcrumb -->
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="javascript:;">Inicio</a></li>
         <li class="breadcrumb-item">
-            <Link :href="route('notificacions.index')">Notificaciones</Link>
+            <Link :href="route('control_integridads.index')"
+                >ControlIntegridades</Link
+            >
         </li>
         <li class="breadcrumb-item active">Ver</li>
     </ol>
     <!-- END breadcrumb -->
     <!-- BEGIN page-header -->
-    <h1 class="page-header">Notificaciones > Ver</h1>
+    <h1 class="page-header">ControlIntegridades > Ver</h1>
     <!-- END page-header -->
 
     <div class="row">
         <div class="col-md-12">
             <Link
-                :href="route('notificacions.index')"
+                :href="route('control_integridads.index')"
                 class="btn btn-outline-secondary mb-2"
                 ><i class="fa fa-arrow-left"></i> Volver</Link
             >
@@ -60,65 +57,25 @@ onBeforeUnmount(() => {});
                 <!-- BEGIN panel-body -->
                 <div class="panel-body">
                     <div class="row">
-                        <div class="col-12">
-                            <p>
-                                <strong>Descripción Notificación: </strong
-                                ><span
-                                    v-html="props.notificacion.descripcion"
-                                ></span>
-                            </p>
-                            <p>
-                                <strong>Código Evidencia: </strong
-                                >{{
-                                    props.notificacion
-                                        .registro_evidencia_archivo?.evidencia
-                                        ?.codigo
-                                }}
-                            </p>
-                            <p>
-                                <strong>Descripción Evidencia: </strong
-                                >{{
-                                    props.notificacion
-                                        .registro_evidencia_archivo?.evidencia
-                                        ?.descripcion
-                                }}
-                            </p>
-                            <p>
-                                <strong>Fecha y Hora de Notificación: </strong
-                                >{{ props.notificacion.fecha_hora_t }}
-                            </p>
-                        </div>
-                        <div
-                            class="col-12"
-                            v-if="
-                                props.notificacion.registro_evidencia_archivo
-                                    .control_integridad
-                            "
-                        >
+                        <div class="col-12" v-if="props.control_integridad">
                             <h4>Información de Control de Integridad:</h4>
                             <p>
                                 <strong>Fecha y Hora de Alteración: </strong
                                 >{{
-                                    props.notificacion
-                                        .registro_evidencia_archivo
-                                        .control_integridad
+                                    props.control_integridad
                                         .fecha_hora_alteracion_t
                                 }}
                             </p>
                             <p>
                                 <strong>Encriptado original: </strong
                                 >{{
-                                    props.notificacion
-                                        .registro_evidencia_archivo
-                                        .control_integridad.encriptado_original
+                                    props.control_integridad.encriptado_original
                                 }}
                             </p>
                             <p>
                                 <strong>Encriptado de alteración: </strong
                                 >{{
-                                    props.notificacion
-                                        .registro_evidencia_archivo
-                                        .control_integridad
+                                    props.control_integridad
                                         .encriptado_alteracion
                                 }}
                             </p>
@@ -127,17 +84,16 @@ onBeforeUnmount(() => {});
                             <p>
                                 <strong>Archivo:</strong>
                                 {{
-                                    props.notificacion
-                                        .registro_evidencia_archivo.name
+                                    props.control_integridad.evidencia_archivo
+                                        .name
                                 }}
                             </p>
                             <div class="row">
                                 <div class="col-12">
                                     <img
                                         :src="
-                                            props.notificacion
-                                                .registro_evidencia_archivo
-                                                .url_file
+                                            props.control_integridad
+                                                .evidencia_archivo.url_file
                                         "
                                         alt=""
                                         style="max-width: 100%"
@@ -146,8 +102,8 @@ onBeforeUnmount(() => {});
                                         <div class="col-12">
                                             <a
                                                 :href="
-                                                    props.notificacion
-                                                        .registro_evidencia_archivo
+                                                    props.control_integridad
+                                                        .evidencia_archivo
                                                         .url_archivo
                                                 "
                                                 target="_blank"

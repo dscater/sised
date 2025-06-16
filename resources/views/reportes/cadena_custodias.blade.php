@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Usuarios</title>
+    <title>Informe Cadena de Custodia</title>
     <style type="text/css">
         * {
             font-family: sans-serif;
@@ -155,24 +155,22 @@
         <h2 class="titulo">
             {{ $configuracion->first()->razon_social }}
         </h2>
-        <h4 class="texto">LISTA DE USUARIOS</h4>
+        <h4 class="texto">INFORME DE CADENA DE CUSTODIA</h4>
         <h4 class="fecha">Expedido: {{ date('d-m-Y') }}</h4>
     </div>
     <table border="1">
         <thead class="bg-principal">
             <tr>
                 <th width="3%">N°</th>
-                <th width="5%">FOTO</th>
-                <th>USUARIO</th>
-                <th>PATERNO</th>
-                <th>MATERNO</th>
-                <th>NOMBRE(S)</th>
-                <th>C.I.</th>
-                <th>DIRECCIÓN</th>
-                <th>CORREO</th>
-                <th>TELÉFONO/CELULAR</th>
-                <th>TIPO</th>
-                <th>ACCESO</th>
+                <th>CÓDIGO EVIDENCIA</th>
+                <th>DESCRIPCIÓN EVIDENCIA</th>
+                <th>RESPONSABLE</th>
+                <th>CARGO</th>
+                <th>ACCIÓN REALIZADA</th>
+                <th>LUGAR/DESTINO</th>
+                <th>FECHA</th>
+                <th>HORA</th>
+                <th>OBSERVACIONES</th>
                 <th width="9%">FECHA DE REGISTRO</th>
             </tr>
         </thead>
@@ -180,25 +178,19 @@
             @php
                 $cont = 1;
             @endphp
-            @foreach ($usuarios as $user)
+            @foreach ($cadena_custodias as $cadena_custodia)
                 <tr>
                     <td class="centreado">{{ $cont++ }}</td>
-                    <td class="img_celda centreado">
-                        <img src="{{ $user->foto_b64 }}" alt="Foto">
-
-                    </td>
-                    <td>{{ $user->usuario }}</td>
-                    <td class="">{{ $user->paterno }}</td>
-                    <td class="">{{ $user->materno }}</td>
-                    <td class="">{{ $user->nombre }}</td>
-                    <td class="">{{ $user->full_ci }}</td>
-                    <td class="">{{ $user->dir }}</td>
-                    <td class="">{{ $user->correo }}</td>
-                    <td class="">{{ $user->fono }}</td>
-                    <td class="">{{ $user->tipo }}</td>
-                    <td class="centreado">{{ $user->acceso == 1 ? 'HABILITADO' : 'DENEGADO' }}</td>
-                    <td class="centreado">{{ $user->fecha_registro_t }}</td>
-                </tr>
+                    <td>{{ $cadena_custodia->evidencia->codigo }}</td>
+                    <td class="">{{ $cadena_custodia->evidencia->descripcion }}</td>
+                    <td class="">{{ $cadena_custodia->responsable }}</td>
+                    <td class="">{{ $cadena_custodia->cargo }}</td>
+                    <td class="">{{ $cadena_custodia->accion }}</td>
+                    <td class="">{{ $cadena_custodia->destino }}</td>
+                    <td class="">{{ $cadena_custodia->fecha_t }}</td>
+                    <td class="">{{ $cadena_custodia->hora }}</td>
+                    <td class="">{{ $cadena_custodia->observaciones }}</td>
+                    <td class="">{{ $cadena_custodia->fecha_registro_t }}</td>
             @endforeach
         </tbody>
     </table>

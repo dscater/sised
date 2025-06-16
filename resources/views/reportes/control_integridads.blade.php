@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Usuarios</title>
+    <title>Control de Integridad</title>
     <style type="text/css">
         * {
             font-family: sans-serif;
@@ -155,24 +155,19 @@
         <h2 class="titulo">
             {{ $configuracion->first()->razon_social }}
         </h2>
-        <h4 class="texto">LISTA DE USUARIOS</h4>
+        <h4 class="texto">INFORME DE CONTROL DE INTEGRIDAD</h4>
         <h4 class="fecha">Expedido: {{ date('d-m-Y') }}</h4>
     </div>
     <table border="1">
         <thead class="bg-principal">
             <tr>
                 <th width="3%">N°</th>
-                <th width="5%">FOTO</th>
-                <th>USUARIO</th>
-                <th>PATERNO</th>
-                <th>MATERNO</th>
-                <th>NOMBRE(S)</th>
-                <th>C.I.</th>
-                <th>DIRECCIÓN</th>
-                <th>CORREO</th>
-                <th>TELÉFONO/CELULAR</th>
-                <th>TIPO</th>
-                <th>ACCESO</th>
+                <th>CÓDIGO EVIDENCIA</th>
+                <th>DESCRIPCIÓN EVIDENCIA</th>
+                <th>FECHA DE ALTERACIÓN</th>
+                <th>HORA DE ALTERACIÓN</th>
+                <th>ENCRIPTADO ORIGINAL</th>
+                <th>ENCRIPTADO DE ALTERACIÓN</th>
                 <th width="9%">FECHA DE REGISTRO</th>
             </tr>
         </thead>
@@ -180,25 +175,16 @@
             @php
                 $cont = 1;
             @endphp
-            @foreach ($usuarios as $user)
+            @foreach ($control_integridads as $control_integridad)
                 <tr>
                     <td class="centreado">{{ $cont++ }}</td>
-                    <td class="img_celda centreado">
-                        <img src="{{ $user->foto_b64 }}" alt="Foto">
-
-                    </td>
-                    <td>{{ $user->usuario }}</td>
-                    <td class="">{{ $user->paterno }}</td>
-                    <td class="">{{ $user->materno }}</td>
-                    <td class="">{{ $user->nombre }}</td>
-                    <td class="">{{ $user->full_ci }}</td>
-                    <td class="">{{ $user->dir }}</td>
-                    <td class="">{{ $user->correo }}</td>
-                    <td class="">{{ $user->fono }}</td>
-                    <td class="">{{ $user->tipo }}</td>
-                    <td class="centreado">{{ $user->acceso == 1 ? 'HABILITADO' : 'DENEGADO' }}</td>
-                    <td class="centreado">{{ $user->fecha_registro_t }}</td>
-                </tr>
+                    <td>{{ $control_integridad->evidencia->codigo }}</td>
+                    <td class="">{{ $control_integridad->evidencia->descripcion }}</td>
+                    <td class="">{{ $control_integridad->fecha_alteracion_t }}</td>
+                    <td class="">{{ $control_integridad->hora_alteracion }}</td>
+                    <td class="">{{ $control_integridad->encriptado_original }}</td>
+                    <td class="">{{ $control_integridad->encriptado_alteracion }}</td>
+                    <td class="">{{ $control_integridad->fecha_registro_t }}</td>
             @endforeach
         </tbody>
     </table>

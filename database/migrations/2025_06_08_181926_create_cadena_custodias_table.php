@@ -22,6 +22,7 @@ return new class extends Migration
             $table->time("hora");
             $table->text("observaciones");
             $table->date("fecha_registro")->nullable();
+            $table->integer("status")->default(1);
             $table->timestamps();
 
             $table->foreign("evidencia_id")->on("evidencias")->references("id");

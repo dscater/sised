@@ -37,7 +37,7 @@ class User extends Authenticatable
         "status",
     ];
 
-    protected $appends = ["permisos", "url_foto", "foto_b64", "full_name", "fecha_registro_t", "usuario_abrev"];
+    protected $appends = ["permisos", "url_foto", "foto_b64", "full_name", "full_ci", "fecha_registro_t", "usuario_abrev"];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -86,6 +86,11 @@ class User extends Authenticatable
     public function getFullNameAttribute()
     {
         return $this->nombre . ' ' . $this->paterno . ($this->materno ? ' ' . $this->materno : '');
+    }
+
+    public function getFullCiAttribute()
+    {
+        return $this->ci . ' ' . $this->ci_exp;
     }
 
     public function getUrlFotoAttribute()

@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Usuarios</title>
+    <title>Cadena de Custodia</title>
     <style type="text/css">
         * {
             font-family: sans-serif;
@@ -11,9 +11,9 @@
 
         @page {
             margin-top: 1.5cm;
-            margin-bottom: 0.3cm;
-            margin-left: 0.3cm;
-            margin-right: 0.3cm;
+            margin-bottom: 1.5cm;
+            margin-left: 2cm;
+            margin-right: 1.5cm;
         }
 
         table {
@@ -31,11 +31,11 @@
         }
 
         table thead tr th {
-            font-size: 7pt;
+            font-size: 8pt;
         }
 
         table tbody tr td {
-            font-size: 6pt;
+            font-size: 7pt;
         }
 
 
@@ -45,7 +45,7 @@
 
         .logo img {
             position: absolute;
-            height: 100px;
+            height: 80px;
             top: -20px;
             left: 0px;
         }
@@ -130,7 +130,8 @@
         }
 
         .gray {
-            background: rgb(202, 202, 202);
+            background: rgb(245, 245, 245);
+            font-weight: bold;
         }
 
         .bg-principal {
@@ -155,51 +156,47 @@
         <h2 class="titulo">
             {{ $configuracion->first()->razon_social }}
         </h2>
-        <h4 class="texto">LISTA DE USUARIOS</h4>
+        <h4 class="texto">CADENA DE CUSTODIA</h4>
         <h4 class="fecha">Expedido: {{ date('d-m-Y') }}</h4>
     </div>
-    <table border="1">
-        <thead class="bg-principal">
-            <tr>
-                <th width="3%">N°</th>
-                <th width="5%">FOTO</th>
-                <th>USUARIO</th>
-                <th>PATERNO</th>
-                <th>MATERNO</th>
-                <th>NOMBRE(S)</th>
-                <th>C.I.</th>
-                <th>DIRECCIÓN</th>
-                <th>CORREO</th>
-                <th>TELÉFONO/CELULAR</th>
-                <th>TIPO</th>
-                <th>ACCESO</th>
-                <th width="9%">FECHA DE REGISTRO</th>
-            </tr>
-        </thead>
+    <table border="1" style="margin-top: 40px">
         <tbody>
-            @php
-                $cont = 1;
-            @endphp
-            @foreach ($usuarios as $user)
-                <tr>
-                    <td class="centreado">{{ $cont++ }}</td>
-                    <td class="img_celda centreado">
-                        <img src="{{ $user->foto_b64 }}" alt="Foto">
-
-                    </td>
-                    <td>{{ $user->usuario }}</td>
-                    <td class="">{{ $user->paterno }}</td>
-                    <td class="">{{ $user->materno }}</td>
-                    <td class="">{{ $user->nombre }}</td>
-                    <td class="">{{ $user->full_ci }}</td>
-                    <td class="">{{ $user->dir }}</td>
-                    <td class="">{{ $user->correo }}</td>
-                    <td class="">{{ $user->fono }}</td>
-                    <td class="">{{ $user->tipo }}</td>
-                    <td class="centreado">{{ $user->acceso == 1 ? 'HABILITADO' : 'DENEGADO' }}</td>
-                    <td class="centreado">{{ $user->fecha_registro_t }}</td>
-                </tr>
-            @endforeach
+            <tr>
+                <td width="15%" class="gray">Código Evidencia</td>
+                <td>{{ $cadena_custodia->evidencia->codigo }}</td>
+            </tr>
+            <tr>
+                <td class="gray">Descripción evidencia</td>
+                <td>{{ $cadena_custodia->evidencia->descripcion }}</td>
+            </tr>
+            <tr>
+                <td class="gray">Responsable</td>
+                <td>{{ $cadena_custodia->responsable }}</td>
+            </tr>
+            <tr>
+                <td class="gray">Cargo</td>
+                <td>{{ $cadena_custodia->cargo }}</td>
+            </tr>
+            <tr>
+                <td class="gray">Acción realizada</td>
+                <td>{{ $cadena_custodia->accion }}</td>
+            </tr>
+            <tr>
+                <td class="gray">Lugar/Destino</td>
+                <td>{{ $cadena_custodia->destino }}</td>
+            </tr>
+            <tr>
+                <td class="gray">Fecha y Hora</td>
+                <td>{{ $cadena_custodia->fecha_hora_t }}</td>
+            </tr>
+            <tr>
+                <td class="gray">Observaciones</td>
+                <td>{{ $cadena_custodia->observaciones }}</td>
+            </tr>
+            <tr>
+                <td class="gray">Fecha de registro</td>
+                <td>{{ $cadena_custodia->fecha_registro_t }}</td>
+            </tr>
         </tbody>
     </table>
 </body>

@@ -16,8 +16,19 @@ onMounted(() => {
     }, 300);
 });
 
+const obtenerFechaActual = () => {
+    const fecha = new Date();
+    const anio = fecha.getFullYear();
+    const mes = String(fecha.getMonth() + 1).padStart(2, "0"); // Mes empieza desde 0
+    const dia = String(fecha.getDate()).padStart(2, "0"); // Día del mes
+    return `${anio}-${mes}-${dia}`;
+};
+
 const form = ref({
-    tipo: "todos",
+    // fecha_ini: obtenerFechaActual(),
+    // fecha_fin: obtenerFechaActual(),
+    fecha_ini: "",
+    fecha_fin: "",
 });
 
 const generando = ref(false);
@@ -39,7 +50,7 @@ const listTipos = ref([
 
 const generarReporte = () => {
     generando.value = true;
-    const url = route("reportes.r_usuarios", form.value);
+    const url = route("reportes.r_evidencias", form.value);
     window.open(url, "_blank");
     setTimeout(() => {
         generando.value = false;
@@ -47,15 +58,15 @@ const generarReporte = () => {
 };
 </script>
 <template>
-    <Head title="Reporte Usuarios"></Head>
+    <Head title="Reporte Evidencias Digitales"></Head>
     <!-- BEGIN breadcrumb -->
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="javascript:;">Inicio</a></li>
-        <li class="breadcrumb-item active">Reportes > Usuarios</li>
+        <li class="breadcrumb-item active">Reportes > Evidencias Digitales</li>
     </ol>
     <!-- END breadcrumb -->
     <!-- BEGIN page-header -->
-    <h1 class="page-header">Reportes > Usuarios</h1>
+    <h1 class="page-header">Reportes > Evidencias Digitales</h1>
     <!-- END page-header -->
     <div class="row">
         <div class="col-md-6 mx-auto">
@@ -64,27 +75,23 @@ const generarReporte = () => {
                     <form @submit.prevent="generarReporte">
                         <div class="row">
                             <div class="col-md-12">
-                                <label>Seleccionar tipo de usuario*</label>
-                                <select
-                                    :hide-details="
-                                        form.errors?.tipo ? false : true
-                                    "
-                                    :error="form.errors?.tipo ? true : false"
-                                    :error-messages="
-                                        form.errors?.tipo
-                                            ? form.errors?.tipo
-                                            : ''
-                                    "
-                                    v-model="form.tipo"
-                                    class="form-control"
-                                >
-                                    <option
-                                        v-for="item in listTipos"
-                                        :value="item.value"
-                                    >
-                                        {{ item.label }}
-                                    </option>
-                                </select>
+                                <label>Indicar rango de fechas</label>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <input
+                                            type="date"
+                                            class="form-control"
+                                            v-model="form.fecha_ini"
+                                        />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input
+                                            type="date"
+                                            class="form-control"
+                                            v-model="form.fecha_fin"
+                                        />
+                                    </div>
+                                </div>
                             </div>
                             <div class="col-md-12 text-center mt-3">
                                 <button

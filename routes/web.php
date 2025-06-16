@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\CadenaCustodiaController;
 use App\Http\Controllers\ConfiguracionController;
+use App\Http\Controllers\ControlIntegridadController;
 use App\Http\Controllers\EvidenciaController;
 use App\Http\Controllers\InicioController;
 use App\Http\Controllers\NotificacionController;
@@ -74,11 +76,31 @@ Route::middleware(['auth', 'permisoUsuario'])->prefix("admin")->group(function (
     Route::get("evidencias/api", [EvidenciaController::class, 'api'])->name("evidencias.api");
     Route::get("evidencias/paginado", [EvidenciaController::class, 'paginado'])->name("evidencias.paginado");
     Route::get("evidencias/listado", [EvidenciaController::class, 'listado'])->name("evidencias.listado");
+    Route::get("evidencias/visualizar", [EvidenciaController::class, 'visualizar'])->name("evidencias.visualizar");
     Route::resource("evidencias", EvidenciaController::class)->only(
         ["index", "store", "show", "update", "destroy"]
     );
 
+    // CONTROL INTEGRIDAD
+    Route::get("control_integridads/api", [ControlIntegridadController::class, 'api'])->name("control_integridads.api");
+    Route::get("control_integridads/paginado", [ControlIntegridadController::class, 'paginado'])->name("control_integridads.paginado");
+    Route::get("control_integridads/listado", [ControlIntegridadController::class, 'listado'])->name("control_integridads.listado");
+    Route::get("control_integridads/ver/{control_integridad}", [ControlIntegridadController::class, 'ver'])->name("control_integridads.ver");
+    Route::resource("control_integridads", ControlIntegridadController::class)->only(
+        ["index", "store", "show", "update", "destroy"]
+    );
+
+    // CADENA DE CUSTODIA
+    Route::get("cadena_custodias/api", [CadenaCustodiaController::class, 'api'])->name("cadena_custodias.api");
+    Route::get("cadena_custodias/paginado", [CadenaCustodiaController::class, 'paginado'])->name("cadena_custodias.paginado");
+    Route::get("cadena_custodias/listado", [CadenaCustodiaController::class, 'listado'])->name("cadena_custodias.listado");
+    Route::get("cadena_custodias/pdf/{cadena_custodia}", [CadenaCustodiaController::class, 'pdf'])->name("cadena_custodias.pdf");
+    Route::resource("cadena_custodias", CadenaCustodiaController::class)->only(
+        ["index", "store", "show", "update", "destroy"]
+    );
+
     // NOTIFICACIONS
+    Route::get("notificacions/api", [NotificacionController::class, 'api'])->name("notificacions.api");
     Route::get("notificacions/listadoPorUsuario", [NotificacionController::class, "listadoPorUsuario"])->name("notificacions.listadoPorUsuario");
     Route::get("notificacions", [NotificacionController::class, "index"])->name("notificacions.index");
     Route::get("notificacions/show/{notificacion}", [NotificacionController::class, "show"])->name("notificacions.show");
@@ -86,5 +108,14 @@ Route::middleware(['auth', 'permisoUsuario'])->prefix("admin")->group(function (
     // REPORTES
     Route::get('reportes/usuarios', [ReporteController::class, 'usuarios'])->name("reportes.usuarios");
     Route::get('reportes/r_usuarios', [ReporteController::class, 'r_usuarios'])->name("reportes.r_usuarios");
+
+    Route::get('reportes/evidencias', [ReporteController::class, 'evidencias'])->name("reportes.evidencias");
+    Route::get('reportes/r_evidencias', [ReporteController::class, 'r_evidencias'])->name("reportes.r_evidencias");
+
+    Route::get('reportes/cadena_custodias', [ReporteController::class, 'cadena_custodias'])->name("reportes.cadena_custodias");
+    Route::get('reportes/r_cadena_custodias', [ReporteController::class, 'r_cadena_custodias'])->name("reportes.r_cadena_custodias");
+
+    Route::get('reportes/control_integridads', [ReporteController::class, 'control_integridads'])->name("reportes.control_integridads");
+    Route::get('reportes/r_control_integridads', [ReporteController::class, 'r_control_integridads'])->name("reportes.r_control_integridads");
 });
 require __DIR__ . '/auth.php';

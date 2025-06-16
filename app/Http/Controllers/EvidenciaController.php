@@ -138,6 +138,16 @@ class EvidenciaController extends Controller
         return response()->JSON($evidencia->load(["archivos"]));
     }
 
+    /**
+     * Página visualizar
+     *
+     * @return Response
+     */
+    public function visualizar(): InertiaResponse
+    {
+        return Inertia::render("Admin/Evidencias/Visualizar");
+    }
+
     public function update(Evidencia $evidencia, EvidenciaUpdateRequest $request)
     {
         DB::beginTransaction();

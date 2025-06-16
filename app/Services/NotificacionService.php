@@ -6,6 +6,7 @@ use App\Models\Notificacion;
 use App\Models\EvidenciaArchivo;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class NotificacionService
 {
@@ -40,7 +41,7 @@ class NotificacionService
         $user = Auth::user();
 
         $notificacion = Notificacion::create([
-            "descripcion" => 'El usuario <b>' . $user->usuario . '</b> modifico el archivo de la evidencia <b>' . $evidenciaArchivo->evidencia->codigo . '</b>',
+            "descripcion" => 'El usuario <b>' . $user->usuario . '</b> modifico un archivo de la evidencia <b>' . $evidenciaArchivo->evidencia->codigo . '</b>',
             "fecha" => date("Y-m-d"),
             "hora" => date("H:i"),
             "modulo" => "EvidenciaArchivo",
@@ -65,7 +66,7 @@ class NotificacionService
         $user = Auth::user();
 
         $notificacion = Notificacion::create([
-            "descripcion" => 'El usuario <b>' . $user->usuario . '</b> eliminó el archivo de la evidencia <b>' . $evidenciaArchivo->evidencia->codigo . '</b>',
+            "descripcion" => 'El usuario <b>' . $user->usuario . '</b> eliminó un archivo de la evidencia <b>' . $evidenciaArchivo->evidencia->codigo . '</b>',
             "fecha" => date("Y-m-d"),
             "hora" => date("H:i"),
             "modulo" => "EvidenciaArchivo",

@@ -9,6 +9,8 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Inertia\Inertia;
+use Inertia\Response as InertiaResponse;
 
 class NotificacionController extends Controller
 {
@@ -94,6 +96,9 @@ class NotificacionController extends Controller
             $notificacionUser->save();
         }
 
-        return Inertia::render("Admin/Notificacions/Show", compact($notificacion));
+        if ($notificacion->modulo == 'EvidenciaArchivo') {
+            $notificacion = $notificacion->load(["registroEvidenciaArchivo.control_integridad", "registroEvidenciaArchivo.evidencia"]);
+        }
+        return Inertia::render("Admin/Notificacions/Show", compact("notificacion"));
     }
 }

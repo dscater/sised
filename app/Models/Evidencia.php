@@ -25,7 +25,18 @@ class Evidencia extends Model
         "status"
     ];
 
-    protected $appends = ["fecha_registro_t", "fecha_hora_creacion_t", "fecha_hora_hallazgo_t"];
+    protected $appends = ["fecha_registro_t", "fecha_hora_creacion_t", "fecha_hora_hallazgo_t", "fecha_creacion_t", "fecha_hallazgo_t"];
+
+    public function getFechaCreacionTAttribute()
+    {
+        return date("d/m/Y", strtotime($this->fecha_creacion));
+    }
+    public function getFechaHallazgoTAttribute()
+    {
+        return date("d/m/Y", strtotime($this->fecha_hallazgo));
+    }
+
+
 
     public function getFechaHoraCreacionTAttribute()
     {

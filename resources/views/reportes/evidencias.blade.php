@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Usuarios</title>
+    <title>Evidencias</title>
     <style type="text/css">
         * {
             font-family: sans-serif;
@@ -155,24 +155,25 @@
         <h2 class="titulo">
             {{ $configuracion->first()->razon_social }}
         </h2>
-        <h4 class="texto">LISTA DE USUARIOS</h4>
+        <h4 class="texto">INFORME DE EVIDENCIAS DIGITALES</h4>
         <h4 class="fecha">Expedido: {{ date('d-m-Y') }}</h4>
     </div>
     <table border="1">
         <thead class="bg-principal">
             <tr>
                 <th width="3%">N°</th>
-                <th width="5%">FOTO</th>
-                <th>USUARIO</th>
-                <th>PATERNO</th>
-                <th>MATERNO</th>
-                <th>NOMBRE(S)</th>
-                <th>C.I.</th>
-                <th>DIRECCIÓN</th>
-                <th>CORREO</th>
-                <th>TELÉFONO/CELULAR</th>
-                <th>TIPO</th>
-                <th>ACCESO</th>
+                <th>CÓDIGO</th>
+                <th>DESCRIPCIÓN</th>
+                <th>NOMBRE DEL CREADOR</th>
+                <th>FECHA DE CREACIÓN</th>
+                <th>HORA DE CREACIÓN</th>
+                <th>ORIGEN DEL ARCHIVO</th>
+                <th>FECHA DE HALLAZGO</th>
+                <th>HORA DE HALLAZGO</th>
+                <th>LUGAR DE RECOLECCIÓN</th>
+                <th>PERSONA QUE RECOLECTO</th>
+                <th>HERRAMIENTA UTILIZADA</th>
+                <th>TOTAL ARCHIVOS CARGADOS</th>
                 <th width="9%">FECHA DE REGISTRO</th>
             </tr>
         </thead>
@@ -180,24 +181,22 @@
             @php
                 $cont = 1;
             @endphp
-            @foreach ($usuarios as $user)
+            @foreach ($evidencias as $evidencia)
                 <tr>
                     <td class="centreado">{{ $cont++ }}</td>
-                    <td class="img_celda centreado">
-                        <img src="{{ $user->foto_b64 }}" alt="Foto">
-
-                    </td>
-                    <td>{{ $user->usuario }}</td>
-                    <td class="">{{ $user->paterno }}</td>
-                    <td class="">{{ $user->materno }}</td>
-                    <td class="">{{ $user->nombre }}</td>
-                    <td class="">{{ $user->full_ci }}</td>
-                    <td class="">{{ $user->dir }}</td>
-                    <td class="">{{ $user->correo }}</td>
-                    <td class="">{{ $user->fono }}</td>
-                    <td class="">{{ $user->tipo }}</td>
-                    <td class="centreado">{{ $user->acceso == 1 ? 'HABILITADO' : 'DENEGADO' }}</td>
-                    <td class="centreado">{{ $user->fecha_registro_t }}</td>
+                    <td>{{ $evidencia->codigo }}</td>
+                    <td class="">{{ $evidencia->descripcion }}</td>
+                    <td class="">{{ $evidencia->nombre_creador }}</td>
+                    <td class="">{{ $evidencia->fecha_creacion_t }}</td>
+                    <td class="">{{ $evidencia->hora_creacion }}</td>
+                    <td class="">{{ $evidencia->origen_archivo }}</td>
+                    <td class="">{{ $evidencia->fecha_hallazgo_t }}</td>
+                    <td class="">{{ $evidencia->hora_hallazgo }}</td>
+                    <td class="">{{ $evidencia->lugar_recoleccion }}</td>
+                    <td class="">{{ $evidencia->persona_recolector }}</td>
+                    <td class="">{{ $evidencia->herramienta_utilizada }}</td>
+                    <td class="">{{ $evidencia->archivos()->count() }}</td>
+                    <td class="centreado">{{ $evidencia->fecha_registro_t }}</td>
                 </tr>
             @endforeach
         </tbody>

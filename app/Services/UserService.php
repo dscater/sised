@@ -24,8 +24,17 @@ class UserService
     public function getNombreUsuario(string $nom, string $apep): string
     {
         //determinando el nombre de usuario inicial del 1er_nombre+apep+tipoUser
-        $nombre_user = substr(mb_strtoupper($nom), 0, 1); //inicial 1er_nombre
-        $nombre_user .= mb_strtoupper($apep);
+        $cont = 0;
+        do {
+            $nombre = mb_strtoupper($nom);
+            $paterno = mb_strtoupper($apep);
+            $nombre_user = substr($nombre, 0, 1); //inicial 1er_nombre
+            $nombre_user .= $paterno;
+            if ($cont > 0) {
+                $nombre_user = $nombre_user . $cont;
+            }
+            $cont++;
+        } while (User::where('usuario', $nombre_user)->get()->first());
         return $nombre_user;
     }
 
@@ -38,7 +47,7 @@ class UserService
     public function crear(array $datos): User
     {
         $user = User::create([
-            "usuario" => $datos["correo"],
+            "usuario" => $this->getNombreUsuario($datos["nombre"], $datos["paterno"]),
             "nombre" => mb_strtoupper($datos["nombre"]),
             "paterno" => mb_strtoupper($datos["paterno"]),
             "materno" => mb_strtoupper($datos["materno"]),
