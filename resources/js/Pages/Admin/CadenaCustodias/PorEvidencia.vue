@@ -1,7 +1,7 @@
 <script setup>
 import { useApp } from "@/composables/useApp";
 import { Head, Link, router, usePage } from "@inertiajs/vue3";
-import { useEvidencias } from "@/composables/evidencias/useEvidencias";
+import { useCadenaCustodias } from "@/composables/cadena_custodias/useCadenaCustodias";
 import { useAxios } from "@/composables/axios/useAxios";
 import { initDataTable } from "@/composables/datatable.js";
 import { ref, onMounted, onBeforeUnmount } from "vue";
@@ -9,6 +9,17 @@ import PanelToolbar from "@/Components/PanelToolbar.vue";
 // import { useMenu } from "@/composables/useMenu";
 import Formulario from "./Formulario.vue";
 // const { mobile, identificaDispositivo } = useMenu();
+const props = defineProps({
+    evidencia: {
+        type: Object,
+        default: {
+            id: 0,
+            codigo: "",
+            descripcion: "",
+            cadena_custodias: [],
+        },
+    },
+});
 const { props: props_page } = usePage();
 const { setLoading } = useApp();
 onMounted(() => {
@@ -17,58 +28,41 @@ onMounted(() => {
     }, 300);
 });
 
-const { setEvidencia, limpiarEvidencia } = useEvidencias();
+const { setCadenaCustodia, limpiarCadenaCustodia } = useCadenaCustodias();
 const { axiosDelete } = useAxios();
 
 const columns = [
     {
-        title: "CÓDIGO",
-        data: "codigo",
+        title: "",
+        data: "id",
     },
     {
-        title: "DESCRIPCIÓN DE LA EVIDENCIA",
-        data: "descripcion",
+        title: "RESPONSABLE",
+        data: "responsable",
     },
     {
-        title: "NOMBRE DEL CREADOR",
-        data: "nombre_creador",
+        title: "CARGO",
+        data: "cargo",
     },
     {
-        title: "FECHA Y HORA DE LA CREACIÓN",
-        data: "fecha_hora_creacion_t",
+        title: "ACCIÓN REALIZADA",
+        data: "accion",
     },
     {
-        title: "FECHA Y HORA DEL HALLAZGO",
-        data: "fecha_hora_hallazgo_t",
+        title: "DESTINO/LUGAR",
+        data: "destino",
     },
     {
-        title: "LUGAR DE RECOLECCIÓN",
-        data: "lugar_recoleccion",
+        title: "FECHA",
+        data: "fecha_t",
     },
     {
-        title: "PERSONA QUE RECOLECTO",
-        data: "persona_recolector",
+        title: "HORA",
+        data: "hora",
     },
     {
-        title: "HERRAMIENTA UTILIZADA",
-        data: "herramienta_utilizada",
-    },
-    {
-        title: "ENCRIPTACIÓN DE ARCHIVOS",
-        sortable: false,
-        data: null,
-        render: function (data, type, row) {
-            let encriptacion = ``;
-            row.archivos.forEach((element) => {
-                encriptacion += `${element.hash_archivo}<br/>`;
-            });
-
-            return encriptacion;
-        },
-    },
-    {
-        title: "FECHA DE REGISTRO",
-        data: "fecha_registro_t",
+        title: "OBSERVACIONES",
+        data: "observaciones",
     },
     {
         title: "ACCIONES",
@@ -78,20 +72,22 @@ const columns = [
 
             if (
                 props_page.auth?.user.permisos == "*" ||
-                props_page.auth?.user.permisos.includes("evidencias.edit")
+                props_page.auth?.user.permisos.includes("cadena_custodias.edit")
             ) {
                 buttons += `<button class="mx-0 rounded-0 btn btn-warning editar" data-id="${row.id}"><i class="fa fa-edit"></i></button>`;
             }
 
             if (
                 props_page.auth?.user.permisos == "*" ||
-                props_page.auth?.user.permisos.includes("evidencias.destroy")
+                props_page.auth?.user.permisos.includes(
+                    "cadena_custodias.destroy"
+                )
             ) {
                 buttons += ` <button class="mx-0 rounded-0 btn btn-danger eliminar"
                  data-id="${row.id}"
-                 data-nombre="${row.nombre}"
+                 data-nombre="${row.id}"
                  data-url="${route(
-                     "evidencias.destroy",
+                     "cadena_custodias.destroy",
                      row.id
                  )}"><i class="fa fa-trash"></i></button>`;
             }
@@ -105,24 +101,32 @@ const accion_dialog = ref(0);
 const open_dialog = ref(false);
 
 const agregarRegistro = () => {
-    limpiarEvidencia();
+    limpiarCadenaCustodia();
     accion_dialog.value = 0;
     open_dialog.value = true;
 };
 
 const accionesRow = () => {
-    // editar
-    $("#table-evidencia").on("click", "button.editar", function (e) {
+    // pdf
+    $("#table-cadena_custodia").on("click", "button.pdf", function (e) {
         e.preventDefault();
         let id = $(this).attr("data-id");
-        axios.get(route("evidencias.show", id)).then((response) => {
-            setEvidencia(response.data);
+        let url = route("cadena_custodias.pdf", id);
+        window.open(url, "_blank");
+    });
+
+    // editar
+    $("#table-cadena_custodia").on("click", "button.editar", function (e) {
+        e.preventDefault();
+        let id = $(this).attr("data-id");
+        axios.get(route("cadena_custodias.show", id)).then((response) => {
+            setCadenaCustodia(response.data);
             accion_dialog.value = 1;
             open_dialog.value = true;
         });
     });
     // eliminar
-    $("#table-evidencia").on("click", "button.eliminar", function (e) {
+    $("#table-cadena_custodia").on("click", "button.eliminar", function (e) {
         e.preventDefault();
         let nombre = $(this).attr("data-nombre");
         let id = $(this).attr("data-id");
@@ -138,7 +142,7 @@ const accionesRow = () => {
             /* Read more about isConfirmed, isDenied below */
             if (result.isConfirmed) {
                 let respuesta = await axiosDelete(
-                    route("evidencias.destroy", id)
+                    route("cadena_custodias.destroy", id)
                 );
                 if (respuesta && respuesta.sw) {
                     updateDatatable();
@@ -159,9 +163,9 @@ const updateDatatable = () => {
 
 onMounted(async () => {
     datatable = initDataTable(
-        "#table-evidencia",
+        "#table-cadena_custodia",
         columns,
-        route("evidencias.api")
+        route("cadena_custodias.apiporEvidencia", props.evidencia.id)
     );
     input_search = document.querySelector('input[type="search"]');
 
@@ -188,16 +192,16 @@ onBeforeUnmount(() => {
 });
 </script>
 <template>
-    <Head title="Evidencia"></Head>
+    <Head title="Cadena de Custodia"></Head>
 
     <!-- BEGIN breadcrumb -->
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="javascript:;">Inicio</a></li>
-        <li class="breadcrumb-item active">Evidencia</li>
+        <li class="breadcrumb-item active">Cadena de Custodia</li>
     </ol>
     <!-- END breadcrumb -->
     <!-- BEGIN page-header -->
-    <h1 class="page-header">Evidencia</h1>
+    <h1 class="page-header">Cadena de Custodia</h1>
     <!-- END page-header -->
 
     <div class="row">
@@ -207,11 +211,17 @@ onBeforeUnmount(() => {
                 <!-- BEGIN panel-heading -->
                 <div class="panel-heading">
                     <h4 class="panel-title btn-nuevo">
+                        <Link
+                            :href="route('cadena_custodias.index')"
+                            class="btn btn-outline btn-secondary"
+                            style="display: inline-block; margin-right: 5px"
+                            ><i class="fa fa-arrow-left"></i> Volver</Link
+                        >
                         <button
                             v-if="
                                 props_page.auth?.user.permisos == '*' ||
                                 props_page.auth?.user.permisos.includes(
-                                    'evidencias.create'
+                                    'cadena_custodias.create'
                                 )
                             "
                             type="button"
@@ -229,15 +239,41 @@ onBeforeUnmount(() => {
                 <!-- END panel-heading -->
                 <!-- BEGIN panel-body -->
                 <div class="panel-body">
+                    <table class="table table-bordered table-dark">
+                        <tbody>
+                            <tr>
+                                <td
+                                    width="10%"
+                                    class="text-white font-weight-bold"
+                                >
+                                    Código Evidencia:
+                                </td>
+                                <td class="text-white">
+                                    {{ props.evidencia.codigo }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td
+                                    width="10%"
+                                    class="text-white font-weight-bold"
+                                >
+                                    Descripción Evidencia:
+                                </td>
+                                <td class="text-white">
+                                    {{ props.evidencia.descripcion }}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
                     <table
-                        id="table-evidencia"
+                        id="table-cadena_custodia"
                         width="100%"
                         class="table table-striped table-bordered align-middle text-nowrap tabla_datos"
                     >
                         <thead>
                             <tr>
                                 <th width="5%"></th>
-                                <th></th>
                                 <th></th>
                                 <th></th>
                                 <th></th>

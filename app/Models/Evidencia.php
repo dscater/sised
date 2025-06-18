@@ -58,4 +58,9 @@ class Evidencia extends Model
     {
         return $this->hasMany(EvidenciaArchivo::class, 'evidencia_id')->where("status", 1);
     }
+
+    public function cadena_custodias()
+    {
+        return $this->hasMany(CadenaCustodia::class, 'evidencia_id')->where("status", 1);
+    }
 }

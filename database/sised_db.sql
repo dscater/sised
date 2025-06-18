@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost:3306
--- Tiempo de generación: 16-06-2025 a las 21:34:43
+-- Tiempo de generación: 18-06-2025 a las 14:58:26
 -- Versión del servidor: 8.0.30
 -- Versión de PHP: 8.2.22
 
@@ -48,8 +48,9 @@ CREATE TABLE `cadena_custodias` (
 --
 
 INSERT INTO `cadena_custodias` (`id`, `evidencia_id`, `responsable`, `cargo`, `accion`, `destino`, `fecha`, `hora`, `observaciones`, `fecha_registro`, `status`, `created_at`, `updated_at`) VALUES
-(1, 1, 'FERNANDO PERES MAMANI', 'CARGO RESPONSABLE', 'ACCION QUE SE REALIZO EN LA CUSTODIA', 'DESTINO LUGAR CADENA', '2025-06-15', '14:00:00', 'OBSERVACIONES CADENA', '2025-06-16', 1, '2025-06-16 18:26:46', '2025-06-16 18:31:28'),
-(2, 2, 'PEDRO GONZALES', 'CARGO PEDRO', 'ACCION REALZIADA CADENA', 'LA PAZ', '2025-06-16', '17:35:00', 'OBSERVACIONES CADENA DE CUSTODIA EVI02', '2025-06-16', 1, '2025-06-16 21:33:11', '2025-06-16 21:33:11');
+(1, 1, 'FERNANDO PERES MAMANI', 'CARGO RESPONSABLE', 'ACCION QUE SE REALIZO EN LA CUSTODIA', 'DESTINO LUGAR CADENA', '2025-06-15', '14:00:00', 'OBSERVACIONES CADENA', '2025-06-16', 1, '2025-06-16 18:26:46', '2025-06-18 14:43:38'),
+(2, 2, 'PEDRO GONZALES', 'CARGO PEDRO', 'ACCION REALZIADA CADENA', 'LA PAZ', '2025-06-16', '17:35:00', 'OBSERVACIONES CADENA DE CUSTODIA EVI02', '2025-06-16', 1, '2025-06-16 21:33:11', '2025-06-16 21:33:11'),
+(3, 1, 'JOSE GONZALES', 'CARGO JOSE', 'ACCION REALZIAD', 'LA PAZ', '2025-06-18', '09:00:00', 'OBSERVACIONES', '2025-06-18', 0, '2025-06-18 14:20:34', '2025-06-18 14:44:07');
 
 -- --------------------------------------------------------
 
@@ -71,7 +72,7 @@ CREATE TABLE `configuracions` (
 --
 
 INSERT INTO `configuracions` (`id`, `nombre_sistema`, `alias`, `logo`, `created_at`, `updated_at`) VALUES
-(1, 'SISED', 'SISED', 'logo.png', NULL, NULL);
+(1, 'SISED', 'SISED', '1750109890_1.png', NULL, '2025-06-16 21:38:10');
 
 -- --------------------------------------------------------
 
@@ -199,7 +200,11 @@ INSERT INTO `historial_accions` (`id`, `user_id`, `accion`, `descripcion`, `dato
 (8, 1, 'CREACIÓN', 'EL USUARIO admin REGISTRO UN USUARIO', '{\"ci\": \"2323424\", \"id\": 5, \"dir\": \"LOS OLIVOS\", \"fono\": \"6544444\", \"tipo\": \"AUDITOR\", \"acceso\": \"1\", \"ci_exp\": \"LP\", \"correo\": \"jorge@gmail.com\", \"nombre\": \"JORGE\", \"materno\": \"MARTINES\", \"paterno\": \"MARTINEZ\", \"usuario\": \"JMARTINEZ\", \"created_at\": \"2025-06-16T21:23:09.000000Z\", \"updated_at\": \"2025-06-16T21:23:09.000000Z\", \"fecha_registro\": \"2025-06-16\"}', NULL, 'USUARIOS', '2025-06-16', '17:23:09', 'Equipo Escritorio - S.O. Windows - Navegador Chrome', '127.0.0.1', '2025-06-16 21:23:09', '2025-06-16 21:23:09'),
 (9, 1, 'CREACIÓN', 'EL USUARIO admin REGISTRO UN USUARIO', '{\"ci\": \"434444\", \"id\": 6, \"dir\": \"LOS PEDREGALES\", \"fono\": \"7445454545\", \"tipo\": \"OBSERVADOR\", \"acceso\": \"1\", \"ci_exp\": \"LP\", \"correo\": null, \"nombre\": \"EDUARDO\", \"materno\": \"\", \"paterno\": \"CARVAJAL\", \"usuario\": \"ECARVAJAL\", \"created_at\": \"2025-06-16T21:23:31.000000Z\", \"updated_at\": \"2025-06-16T21:23:31.000000Z\", \"fecha_registro\": \"2025-06-16\"}', NULL, 'USUARIOS', '2025-06-16', '17:23:31', 'Equipo Escritorio - S.O. Windows - Navegador Chrome', '127.0.0.1', '2025-06-16 21:23:31', '2025-06-16 21:23:31'),
 (10, 3, 'CREACIÓN', 'EL USUARIO FPAREDES REGISTRO UNA EVIDENCIA', '{\"id\": 2, \"codigo\": \"EVI02\", \"archivos\": [{\"id\": 6, \"ext\": \"jpg\", \"name\": \"021750109546.jpg\", \"status\": 1, \"archivo\": \"021750109546.jpg\", \"url_file\": \"http://sised.test/evidencias/021750109546.jpg\", \"created_at\": \"2025-06-16T21:32:26.000000Z\", \"updated_at\": \"2025-06-16T21:32:26.000000Z\", \"archivo_b64\": \"\", \"url_archivo\": \"http://sised.test/evidencias/021750109546.jpg\", \"evidencia_id\": 2, \"hash_archivo\": \"c366e5857e90a892df1f24352ff5eea4d62f1c43a22470194591f39023975f95\"}, {\"id\": 7, \"ext\": \"mp4\", \"name\": \"121750109546.mp4\", \"status\": 1, \"archivo\": \"121750109546.mp4\", \"url_file\": \"http://sised.test/imgs/attach.png\", \"created_at\": \"2025-06-16T21:32:26.000000Z\", \"updated_at\": \"2025-06-16T21:32:26.000000Z\", \"archivo_b64\": \"\", \"url_archivo\": \"http://sised.test/evidencias/121750109546.mp4\", \"evidencia_id\": 2, \"hash_archivo\": \"f20619921b55a3ee2d3ceebbad4dbba83dd8b6ba6c0414b152ed7f6f050f1761\"}], \"created_at\": \"2025-06-16T21:32:26.000000Z\", \"updated_at\": \"2025-06-16T21:32:26.000000Z\", \"descripcion\": \"DESCRIPCION EVI02\", \"hora_creacion\": \"15:00\", \"hora_hallazgo\": \"09:00\", \"fecha_creacion\": \"2025-06-16\", \"fecha_hallazgo\": \"2025-01-01\", \"fecha_registro\": \"2025-06-16\", \"nombre_creador\": \"PEDRO GONZALES\", \"origen_archivo\": \"ORIGEN DEL ARCHIVO EVI02\", \"lugar_recoleccion\": \"LUGAR RECOLECCION\", \"persona_recolector\": \"PEDRO GONZALES\", \"herramienta_utilizada\": \"HERRAMIENTA EVI02\"}', NULL, 'EVIDENCIAS', '2025-06-16', '17:32:26', 'Equipo Escritorio - S.O. Windows - Navegador Chrome', '127.0.0.1', '2025-06-16 21:32:26', '2025-06-16 21:32:26'),
-(11, 3, 'CREACIÓN', 'EL USUARIO FPAREDES REGISTRO UNA CADENA DE CUSTODIA', '{\"id\": 2, \"hora\": \"17:35\", \"cargo\": \"CARGO PEDRO\", \"fecha\": \"2025-06-16\", \"accion\": \"ACCION REALZIADA CADENA\", \"destino\": \"LA PAZ\", \"created_at\": \"2025-06-16T21:33:11.000000Z\", \"updated_at\": \"2025-06-16T21:33:11.000000Z\", \"responsable\": \"PEDRO GONZALES\", \"evidencia_id\": \"2\", \"observaciones\": \"OBSERVACIONES CADENA DE CUSTODIA EVI02\", \"fecha_registro\": \"2025-06-16\"}', NULL, 'CADENA DE CUSTODIA', '2025-06-16', '17:33:11', 'Equipo Escritorio - S.O. Windows - Navegador Chrome', '127.0.0.1', '2025-06-16 21:33:11', '2025-06-16 21:33:11');
+(11, 3, 'CREACIÓN', 'EL USUARIO FPAREDES REGISTRO UNA CADENA DE CUSTODIA', '{\"id\": 2, \"hora\": \"17:35\", \"cargo\": \"CARGO PEDRO\", \"fecha\": \"2025-06-16\", \"accion\": \"ACCION REALZIADA CADENA\", \"destino\": \"LA PAZ\", \"created_at\": \"2025-06-16T21:33:11.000000Z\", \"updated_at\": \"2025-06-16T21:33:11.000000Z\", \"responsable\": \"PEDRO GONZALES\", \"evidencia_id\": \"2\", \"observaciones\": \"OBSERVACIONES CADENA DE CUSTODIA EVI02\", \"fecha_registro\": \"2025-06-16\"}', NULL, 'CADENA DE CUSTODIA', '2025-06-16', '17:33:11', 'Equipo Escritorio - S.O. Windows - Navegador Chrome', '127.0.0.1', '2025-06-16 21:33:11', '2025-06-16 21:33:11'),
+(12, 3, 'CREACIÓN', 'EL USUARIO FPAREDES REGISTRO UNA CADENA DE CUSTODIA', '{\"id\": 3, \"hora\": \"09:00\", \"cargo\": \"CARGO JOSE\", \"fecha\": \"2025-06-18\", \"accion\": \"ACCION REALZIAD\", \"destino\": \"LA PAZ\", \"created_at\": \"2025-06-18T14:20:34.000000Z\", \"updated_at\": \"2025-06-18T14:20:34.000000Z\", \"responsable\": \"JOSE GONZALES\", \"evidencia_id\": \"1\", \"observaciones\": \"OBSERVACIONES\", \"fecha_registro\": \"2025-06-18\"}', NULL, 'CADENA DE CUSTODIA', '2025-06-18', '10:20:34', 'Equipo Escritorio - S.O. Windows - Navegador Chrome', '127.0.0.1', '2025-06-18 14:20:34', '2025-06-18 14:20:34'),
+(13, 3, 'MODIFICACIÓN', 'EL USUARIO FPAREDES ACTUALIZÓ UNA CADENA DE CUSTODIA', '{\"id\": 1, \"hora\": \"14:00:00\", \"cargo\": \"CARGO RESPONSABLE\", \"fecha\": \"2025-06-15\", \"accion\": \"ACCION QUE SE REALIZO EN LA CUSTODIA\", \"status\": 1, \"destino\": \"DESTINO LUGAR CADENA\", \"created_at\": \"2025-06-16T18:26:46.000000Z\", \"updated_at\": \"2025-06-16T18:31:28.000000Z\", \"responsable\": \"FERNANDO PERES MAMANI\", \"evidencia_id\": 1, \"observaciones\": \"OBSERVACIONES CADENA\", \"fecha_registro\": \"2025-06-16\"}', '{\"id\": 1, \"hora\": \"14:00:00\", \"cargo\": \"CARGO RESPONSABLE\", \"fecha\": \"2025-06-15\", \"accion\": \"ACCION QUE SE REALIZO EN LA CUSTODIA\", \"status\": 1, \"destino\": \"DESTINO LUGAR CADENA\", \"created_at\": \"2025-06-16T18:26:46.000000Z\", \"updated_at\": \"2025-06-18T14:43:31.000000Z\", \"responsable\": \"FERNANDO PERES MAMANIS\", \"evidencia_id\": \"1\", \"observaciones\": \"OBSERVACIONES CADENA\", \"fecha_registro\": \"2025-06-16\"}', 'CADENA DE CUSTODIA', '2025-06-18', '10:43:31', 'Equipo Escritorio - S.O. Windows - Navegador Chrome', '127.0.0.1', '2025-06-18 14:43:31', '2025-06-18 14:43:31'),
+(14, 3, 'MODIFICACIÓN', 'EL USUARIO FPAREDES ACTUALIZÓ UNA CADENA DE CUSTODIA', '{\"id\": 1, \"hora\": \"14:00:00\", \"cargo\": \"CARGO RESPONSABLE\", \"fecha\": \"2025-06-15\", \"accion\": \"ACCION QUE SE REALIZO EN LA CUSTODIA\", \"status\": 1, \"destino\": \"DESTINO LUGAR CADENA\", \"created_at\": \"2025-06-16T18:26:46.000000Z\", \"updated_at\": \"2025-06-18T14:43:31.000000Z\", \"responsable\": \"FERNANDO PERES MAMANIS\", \"evidencia_id\": 1, \"observaciones\": \"OBSERVACIONES CADENA\", \"fecha_registro\": \"2025-06-16\"}', '{\"id\": 1, \"hora\": \"14:00:00\", \"cargo\": \"CARGO RESPONSABLE\", \"fecha\": \"2025-06-15\", \"accion\": \"ACCION QUE SE REALIZO EN LA CUSTODIA\", \"status\": 1, \"destino\": \"DESTINO LUGAR CADENA\", \"created_at\": \"2025-06-16T18:26:46.000000Z\", \"updated_at\": \"2025-06-18T14:43:38.000000Z\", \"responsable\": \"FERNANDO PERES MAMANI\", \"evidencia_id\": \"1\", \"observaciones\": \"OBSERVACIONES CADENA\", \"fecha_registro\": \"2025-06-16\"}', 'CADENA DE CUSTODIA', '2025-06-18', '10:43:38', 'Equipo Escritorio - S.O. Windows - Navegador Chrome', '127.0.0.1', '2025-06-18 14:43:38', '2025-06-18 14:43:38'),
+(15, 3, 'ELIMINACIÓN', 'EL USUARIO FPAREDES ELIMINÓ UNA CADENA DE CUSTODIA', '{\"id\": 3, \"hora\": \"09:00:00\", \"cargo\": \"CARGO JOSE\", \"fecha\": \"2025-06-18\", \"accion\": \"ACCION REALZIAD\", \"status\": 1, \"destino\": \"LA PAZ\", \"created_at\": \"2025-06-18T14:20:34.000000Z\", \"updated_at\": \"2025-06-18T14:20:34.000000Z\", \"responsable\": \"JOSE GONZALES\", \"evidencia_id\": 1, \"observaciones\": \"OBSERVACIONES\", \"fecha_registro\": \"2025-06-18\"}', NULL, 'CADENA DE CUSTODIA', '2025-06-18', '10:44:07', 'Equipo Escritorio - S.O. Windows - Navegador Chrome', '127.0.0.1', '2025-06-18 14:44:07', '2025-06-18 14:44:07');
 
 -- --------------------------------------------------------
 
@@ -403,7 +408,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT de la tabla `cadena_custodias`
 --
 ALTER TABLE `cadena_custodias`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `configuracions`
@@ -433,7 +438,7 @@ ALTER TABLE `evidencia_archivos`
 -- AUTO_INCREMENT de la tabla `historial_accions`
 --
 ALTER TABLE `historial_accions`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT de la tabla `migrations`

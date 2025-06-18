@@ -163,40 +163,74 @@
         <tbody>
             <tr>
                 <td width="15%" class="gray">Código Evidencia</td>
-                <td>{{ $cadena_custodia->evidencia->codigo }}</td>
+                <td>{{ $evidencia->codigo }}</td>
             </tr>
             <tr>
                 <td class="gray">Descripción evidencia</td>
-                <td>{{ $cadena_custodia->evidencia->descripcion }}</td>
+                <td>{{ $evidencia->descripcion }}</td>
             </tr>
             <tr>
-                <td class="gray">Responsable</td>
-                <td>{{ $cadena_custodia->responsable }}</td>
+                <td class="gray">Nombre del creador</td>
+                <td>{{ $evidencia->nombre_creador }}</td>
             </tr>
             <tr>
-                <td class="gray">Cargo</td>
-                <td>{{ $cadena_custodia->cargo }}</td>
+                <td class="gray">Fecha y hora de Creación</td>
+                <td>{{ $evidencia->fecha_hora_creacion_t }}</td>
             </tr>
             <tr>
-                <td class="gray">Acción realizada</td>
-                <td>{{ $cadena_custodia->accion }}</td>
+                <td class="gray">Origen del archivo </td>
+                <td>{{ $evidencia->origen_archivo }}</td>
             </tr>
             <tr>
-                <td class="gray">Lugar/Destino</td>
-                <td>{{ $cadena_custodia->destino }}</td>
+                <td class="gray">Fecha y hora de hallazgo</td>
+                <td>{{ $evidencia->fecha_hora_hallazgo_t }}</td>
             </tr>
             <tr>
-                <td class="gray">Fecha y Hora</td>
-                <td>{{ $cadena_custodia->fecha_hora_t }}</td>
+                <td class="gray">Lugar de recolección</td>
+                <td>{{ $evidencia->lugar_recoleccion }}</td>
             </tr>
             <tr>
-                <td class="gray">Observaciones</td>
-                <td>{{ $cadena_custodia->observaciones }}</td>
+                <td class="gray">Persona que recolecto</td>
+                <td>{{ $evidencia->persona_recolector }}</td>
             </tr>
             <tr>
-                <td class="gray">Fecha de registro</td>
-                <td>{{ $cadena_custodia->fecha_registro_t }}</td>
+                <td class="gray">Herramienta utilizada</td>
+                <td>{{ $evidencia->herramienta_utilizada }}</td>
             </tr>
+        </tbody>
+    </table>
+    <h4>Cadena de Custodia</h4>
+    <table border="1">
+        <thead>
+            <tr>
+                <th width="5%">Nro.</th>
+                <th>Responsable</th>
+                <th>Cargo</th>
+                <th>Acción</th>
+                <th>Destino</th>
+                <th>Fecha</th>
+                <th>Hora</th>
+                <th>Observaciones</th>
+                <th>Fecha de registro</th>
+            </tr>
+        </thead>
+        <tbody>
+            @php
+                $cont = 1;
+            @endphp
+            @foreach ($evidencia->cadena_custodias as $cadena_custodia)
+                <tr>
+                    <td>{{ $cont++ }}</td>
+                    <td>{{ $cadena_custodia->responsable }}</td>
+                    <td>{{ $cadena_custodia->cargo }}</td>
+                    <td>{{ $cadena_custodia->accion }}</td>
+                    <td>{{ $cadena_custodia->destino }}</td>
+                    <td>{{ $cadena_custodia->fecha_t }}</td>
+                    <td>{{ $cadena_custodia->hora }}</td>
+                    <td>{{ $cadena_custodia->observaciones }}</td>
+                    <td>{{ $cadena_custodia->fecha_registro_t }}</td>
+                </tr>
+            @endforeach
         </tbody>
     </table>
 </body>

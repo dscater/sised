@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CadenaCustodiaStoreRequest;
 use App\Http\Requests\CadenaCustodiaUpdateRequest;
 use App\Models\CadenaCustodia;
+use App\Models\Evidencia;
 use App\Services\CadenaCustodiaService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -28,6 +29,17 @@ class CadenaCustodiaController extends Controller
     public function index(): InertiaResponse
     {
         return Inertia::render("Admin/CadenaCustodias/Index");
+    }
+
+    /**
+     * Página porEvidencia
+     *
+     * @return Response
+     */
+    public function porEvidencia(Evidencia $evidencia): InertiaResponse
+    {
+        $evidencia = $evidencia->load(["cadena_custodias"]);
+        return Inertia::render("Admin/CadenaCustodias/PorEvidencia", compact("evidencia"));
     }
 
     /**
@@ -68,12 +80,36 @@ class CadenaCustodiaController extends Controller
         $page = (int)(($start / $length) + 1); // Cálculo de la página actual
         $search = (string)$request->input('search', '');
 
-        $usuarios = $this->cadena_custodiaService->listadoDataTable($length, $start, $page, $search);
+        $evidencias = $this->cadena_custodiaService->listadoDataTable($length, $start, $page, $search);
 
         return response()->JSON([
-            'data' => $usuarios->items(),
-            'recordsTotal' => $usuarios->total(),
-            'recordsFiltered' => $usuarios->total(),
+            'data' => $evidencias->items(),
+            'recordsTotal' => $evidencias->total(),
+            'recordsFiltered' => $evidencias->total(),
+            'draw' => intval($request->input('draw')),
+        ]);
+    }
+
+    /**
+     * Endpoint para obtener la lista de cadena_custodias paginado para datatable
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function apiporEvidencia(Request $request, Evidencia $evidencia): JsonResponse
+    {
+
+        $length = (int)$request->input('length', 10); // Valor de `length` enviado por DataTable
+        $start = (int)$request->input('start', 0); // Índice de inicio enviado por DataTable
+        $page = (int)(($start / $length) + 1); // Cálculo de la página actual
+        $search = (string)$request->input('search', '');
+
+        $evidencias = $this->cadena_custodiaService->listadoDataTablePorEvidencia($evidencia->id, $length, $start, $page, $search);
+
+        return response()->JSON([
+            'data' => $evidencias->items(),
+            'recordsTotal' => $evidencias->total(),
+            'recordsFiltered' => $evidencias->total(),
             'draw' => intval($request->input('draw')),
         ]);
     }
@@ -111,9 +147,9 @@ class CadenaCustodiaController extends Controller
         return response()->JSON($cadena_custodia);
     }
 
-    public function pdf(CadenaCustodia $cadena_custodia)
+    public function pdf(Evidencia $evidencia)
     {
-        $pdf = PDF::loadView('reportes.cadena_custodia', compact('cadena_custodia'))->setPaper('letter', 'portrait');
+        $pdf = PDF::loadView('reportes.cadena_custodia', compact('evidencia'))->setPaper('letter', 'portrait');
 
         // ENUMERAR LAS PÁGINAS USANDO CANVAS
         $pdf->output();

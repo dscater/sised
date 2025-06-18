@@ -36,6 +36,8 @@ class PermisoService
             "cadena_custodias.index",
             "cadena_custodias.show",
             "cadena_custodias.pdf",
+            "cadena_custodias.apiporEvidencia",
+            "cadena_custodias.porEvidencia",
 
             "control_integridads.api",
             "control_integridads.listado",
@@ -91,6 +93,8 @@ class PermisoService
             "cadena_custodias.pdf",
             "cadena_custodias.update",
             "cadena_custodias.destroy",
+            "cadena_custodias.apiporEvidencia",
+            "cadena_custodias.porEvidencia",
 
             "control_integridads.api",
             "control_integridads.listado",
@@ -127,6 +131,8 @@ class PermisoService
             "cadena_custodias.index",
             "cadena_custodias.show",
             "cadena_custodias.pdf",
+            "cadena_custodias.apiporEvidencia",
+            "cadena_custodias.porEvidencia",
 
             "control_integridads.api",
             "control_integridads.listado",
@@ -163,6 +169,8 @@ class PermisoService
             "cadena_custodias.index",
             "cadena_custodias.show",
             "cadena_custodias.pdf",
+            "cadena_custodias.apiporEvidencia",
+            "cadena_custodias.porEvidencia",
 
             "control_integridads.api",
             "control_integridads.listado",

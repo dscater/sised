@@ -27,35 +27,36 @@ const columns = [
     },
     {
         title: "CÓDIGO EVIDENCIA",
-        data: "evidencia.codigo",
+        data: "codigo",
     },
     {
-        title: "RESPONSABLE",
-        data: "responsable",
+        title: "DESCRIPCIÓN DE LA EVIDENCIA",
+        data: "descripcion",
     },
     {
-        title: "CARGO",
-        data: "cargo",
+        title: "NOMBRE DEL CREADOR",
+        data: "nombre_creador",
     },
     {
-        title: "ACCIÓN REALIZADA",
-        data: "accion",
+        title: "FECHA Y HORA DE LA CREACIÓN",
+        data: "fecha_hora_creacion_t",
     },
     {
-        title: "DESTINO/LUGAR",
-        data: "destino",
+        title: "FECHA Y HORA DEL HALLAZGO",
+        data: "fecha_hora_hallazgo_t",
     },
     {
-        title: "FECHA",
-        data: "fecha_t",
-    },
-    {
-        title: "HORA",
-        data: "hora",
-    },
-    {
-        title: "OBSERVACIONES",
-        data: "observaciones",
+        title: "CADENA DE CUSTODIA",
+        sortable: false,
+        data: null,
+        render(data, type, row) {
+            return `<a  href="${route(
+                "cadena_custodias.porEvidencia",
+                row.id
+            )}" class="btn btn-success" title="Cadena de custodias"><span class="font-weight-bold h5">${
+                row.cadena_custodias.length
+            }</span></br><i class="fa fa-arrow-right"></i></a>`;
+        },
     },
     {
         title: "ACCIONES",
@@ -68,28 +69,6 @@ const columns = [
                 props_page.auth?.user.permisos.includes("cadena_custodias.pdf")
             ) {
                 buttons += `<button class="mx-1 rounded-0 btn btn-primary pdf" data-id="${row.id}"><i class="fa fa-print"></i></button>`;
-            }
-
-            if (
-                props_page.auth?.user.permisos == "*" ||
-                props_page.auth?.user.permisos.includes("cadena_custodias.edit")
-            ) {
-                buttons += `<button class="mx-0 rounded-0 btn btn-warning editar" data-id="${row.id}"><i class="fa fa-edit"></i></button>`;
-            }
-
-            if (
-                props_page.auth?.user.permisos == "*" ||
-                props_page.auth?.user.permisos.includes(
-                    "cadena_custodias.destroy"
-                )
-            ) {
-                buttons += ` <button class="mx-0 rounded-0 btn btn-danger eliminar"
-                 data-id="${row.id}"
-                 data-nombre="${row.id} - ${row.evidencia.codigo}"
-                 data-url="${route(
-                     "cadena_custodias.destroy",
-                     row.id
-                 )}"><i class="fa fa-trash"></i></button>`;
             }
 
             return buttons;

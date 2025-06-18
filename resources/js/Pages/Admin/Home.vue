@@ -15,14 +15,13 @@ const props_page = defineProps({
 });
 
 const { setLoading } = useApp();
+const { props } = usePage();
 onMounted(() => {
     setTimeout(() => {
         setLoading(false);
     }, 300);
 });
 const { oConfiguracion } = useConfiguracion();
-
-const { props } = usePage();
 </script>
 <template>
     <Head title="Inicio"></Head>
@@ -60,6 +59,16 @@ const { props } = usePage();
             </div>
         </div>
     </div>
+    <div class="row">
+        <div class="col-12 contenedor_img">
+            <img
+                :src="props.url_assets + 'imgs/fondo.jpg'"
+                alt="Fondo"
+                class="imgFondo"
+            />
+            <div class="overlay-azul"></div>
+        </div>
+    </div>
 </template>
 <style scoped>
 .item_btn {
@@ -84,5 +93,30 @@ const { props } = usePage();
     font-weight: bold;
     font-size: 1.3em;
     flex-direction: column;
+}
+
+.contenedor_img {
+    position: relative;
+    width: 100%;
+    height: 100vh; /* o lo que necesites */
+    overflow: hidden;
+}
+
+.imgFondo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    opacity: 0.8;
+}
+
+.overlay-azul {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 123, 255, 0.171); /* azul con opacidad */
+    z-index: 1;
 }
 </style>

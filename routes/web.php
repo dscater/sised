@@ -92,9 +92,11 @@ Route::middleware(['auth', 'permisoUsuario'])->prefix("admin")->group(function (
 
     // CADENA DE CUSTODIA
     Route::get("cadena_custodias/api", [CadenaCustodiaController::class, 'api'])->name("cadena_custodias.api");
+    Route::get("cadena_custodias/api/porEvidencia/{evidencia}", [CadenaCustodiaController::class, 'apiporEvidencia'])->name("cadena_custodias.apiporEvidencia");
+    Route::get("cadena_custodias/porEvidencia/{evidencia}", [CadenaCustodiaController::class, 'porEvidencia'])->name("cadena_custodias.porEvidencia");
     Route::get("cadena_custodias/paginado", [CadenaCustodiaController::class, 'paginado'])->name("cadena_custodias.paginado");
     Route::get("cadena_custodias/listado", [CadenaCustodiaController::class, 'listado'])->name("cadena_custodias.listado");
-    Route::get("cadena_custodias/pdf/{cadena_custodia}", [CadenaCustodiaController::class, 'pdf'])->name("cadena_custodias.pdf");
+    Route::get("cadena_custodias/pdf/{evidencia}", [CadenaCustodiaController::class, 'pdf'])->name("cadena_custodias.pdf");
     Route::resource("cadena_custodias", CadenaCustodiaController::class)->only(
         ["index", "store", "show", "update", "destroy"]
     );

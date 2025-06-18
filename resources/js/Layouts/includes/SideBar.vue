@@ -586,7 +586,8 @@ const logout = () => {
                     "
                     class="menu-item"
                     :class="[
-                        route_current == 'cadena_custodias.index'
+                        route_current == 'cadena_custodias.index' ||
+                        route_current == 'cadena_custodias.porEvidencia'
                             ? 'active'
                             : 'none',
                     ]"

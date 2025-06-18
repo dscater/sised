@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Services\HistorialAccionService;
 use App\Models\CadenaCustodia;
+use App\Models\Evidencia;
 use App\Models\Producto;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -24,6 +25,34 @@ class CadenaCustodiaService
 
     public function listadoDataTable(int $length, int $start, int $page, string $search): LengthAwarePaginator
     {
+        // $cadena_custodias = CadenaCustodia::with(["evidencia"])->select("cadena_custodias.*")
+        //     ->join("evidencias", "evidencias.id", "=", "cadena_custodias.evidencia_id");
+        // if ($search && trim($search) != '') {
+        //     $cadena_custodias->where(function ($query) use ($search) {
+        //         $query->where("evidencias.codigo", "LIKE", "%$search%")
+        //             ->orWhere("cadena_custodias.responsable", "LIKE", "%$search%")
+        //             ->orWhere("cadena_custodias.cargo", "LIKE", "%$search%")
+        //             ->orWhere("cadena_custodias.accion", "LIKE", "%$search%")
+        //             ->orWhere("cadena_custodias.destino", "LIKE", "%$search%")
+        //             ->orWhere("cadena_custodias.observaciones", "LIKE", "%$search%");
+        //     });
+        // }
+        // $cadena_custodias->where("evidencias.status", 1);
+        // $cadena_custodias = $cadena_custodias->paginate($length, ['*'], 'page', $page);
+
+        $evidencias = Evidencia::with(["cadena_custodias"])->select("evidencias.*")
+            ->join("cadena_custodias", "cadena_custodias.evidencia_id", "=", "evidencias.id");
+        if ($search && trim($search) != '') {
+            $evidencias->where("evidencias.codigo", "LIKE", "%$search%");
+        }
+        $evidencias->where("evidencias.status", 1);
+        $evidencias->distinct("evidencias.id");
+        $evidencias = $evidencias->paginate($length, ['*'], 'page', $page);
+        return $evidencias;
+    }
+
+    public function listadoDataTablePorEvidencia(int $evidencia_id, int $length, int $start, int $page, string $search): LengthAwarePaginator
+    {
         $cadena_custodias = CadenaCustodia::with(["evidencia"])->select("cadena_custodias.*")
             ->join("evidencias", "evidencias.id", "=", "cadena_custodias.evidencia_id");
         if ($search && trim($search) != '') {
@@ -36,8 +65,10 @@ class CadenaCustodiaService
                     ->orWhere("cadena_custodias.observaciones", "LIKE", "%$search%");
             });
         }
-        $cadena_custodias->where("evidencias.status", 1);
+        $cadena_custodias->where("evidencias.id", $evidencia_id);
+        $cadena_custodias->where("cadena_custodias.status", 1);
         $cadena_custodias = $cadena_custodias->paginate($length, ['*'], 'page', $page);
+
         return $cadena_custodias;
     }
 
